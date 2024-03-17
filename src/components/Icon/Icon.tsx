@@ -1,6 +1,6 @@
-import { ReactComponent as TwitterIcon } from './twitter.svg';
-import { ReactComponent as GithubIcon } from './github.svg';
-import { ReactComponent as HamburgerMenuIcon } from './hamburger-menu.svg';
+import { ReactComponent as TwitterIcon } from './svgs/twitter.svg';
+import { ReactComponent as GithubIcon } from './svgs/github.svg';
+import { ReactComponent as HamburgerMenuIcon } from './svgs/hamburger-menu.svg';
 
 export enum Icons {
   TWITTER,
