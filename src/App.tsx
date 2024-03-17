@@ -1,10 +1,10 @@
-import AppRouter from './components/router/AppRouter';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
 
 function App() {
   return (
     <div>
-      <div>Header goes here</div>
-      <AppRouter />
+      <RouterProvider router={router} />
     </div>
   );
 }
