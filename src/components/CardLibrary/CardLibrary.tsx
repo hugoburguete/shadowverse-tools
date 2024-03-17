@@ -1,21 +1,23 @@
-import { Card, CardProps } from '../Card/Card';
-import Draggable from '../dnd/Draggable';
+import { Card, CardDragSource } from '../../entities/card';
+import CardList from '../CardList';
+import Droppable from '../dnd/Droppable';
 
 export type CardLibraryProps = {
-  cards: CardProps[];
+  cards: Card[];
 };
 
 const CardLibrary = ({ cards }: CardLibraryProps) => {
+  const cardsForDisplay = cards.map((c) => ({ ...c, quantity: 1 }));
+
   return (
-    <div className="grid grid-cols-2 w-96 gap-3 p-3 overflow-y-scroll">
-      {cards.map((card) => (
-        <div key={card.cardId}>
-          <Draggable id={card.cardId}>
-            <Card {...card} />
-          </Draggable>
-        </div>
-      ))}
-    </div>
+    <Droppable id="card-library">
+      <div className="grid grid-cols-2 w-96 gap-3 p-3 overflow-y-scroll">
+        <CardList
+          cards={cardsForDisplay}
+          source={CardDragSource.CARD_LIBRARY}
+        />
+      </div>
+    </Droppable>
   );
 };
 

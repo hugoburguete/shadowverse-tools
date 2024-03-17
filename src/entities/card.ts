@@ -1,4 +1,4 @@
-export type CardProps = {
+export type Card = {
   cardId: string;
   name: string;
   type: string;
@@ -10,10 +10,12 @@ export type CardProps = {
   image: string;
 };
 
-export const Card = ({ image, name }: CardProps) => {
-  return (
-    <div>
-      <img src={image} alt={name} />
-    </div>
-  );
+export enum CardDragSource {
+  CARD_LIBRARY,
+  DECK,
+}
+
+export type CardDragData = {
+  id: string;
+  source: CardDragSource;
 };

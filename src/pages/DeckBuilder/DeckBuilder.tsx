@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import P from '../../components/typography/Paragraph';
-import { Card, CardProps } from '../../components/Card/Card';
+import CardDisplay from '../../components/CardDisplay';
 import CardLibrary from '../../components/CardLibrary';
-import Droppable from '../../components/dnd/Droppable/Droppable';
 import {
   DndContext,
   DragEndEvent,
@@ -10,6 +9,10 @@ import {
   DragStartEvent,
   UniqueIdentifier,
 } from '@dnd-kit/core';
+import DeckOverview from '../../components/DeckOverview';
+import { Card, CardDragSource, CardDragData } from '../../entities/card';
+import { addCardToDeck, removeCardToDeck } from '../../lib/helpers/card';
+import Heading from '../../components/typography/Heading';
 
 export type DeckBuilderProps = {};
 
@@ -17,7 +20,8 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   const [cardDraggedId, setCardDraggedId] = useState<UniqueIdentifier | null>(
     null
   );
-  const dummyCardLibrary: CardProps[] = [
+  const [deck, setDeck] = useState<Card[]>([]);
+  const cardPool: Card[] = [
     {
       cardId: 'BP01-116',
       image: 'https://images.shadowcard.io/images/cards/BP01-116.jpg',
@@ -92,38 +96,42 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
     },
   ];
 
-  const cardDragged = dummyCardLibrary.find(
-    (card) => card.cardId === cardDraggedId
-  );
+  const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   function handleDragEnd(event: DragEndEvent) {
-    if (event.over && event.over.id === 'droppable') {
-      console.log('dropped');
+    const { source } = event.active.data.current as CardDragData;
+    if (event.over && cardDragged && event.over.id !== source) {
+      const target = event.over.id as CardDragSource;
+      if (target === CardDragSource.DECK) {
+        setDeck(addCardToDeck(cardDragged, deck, []));
+      } else if (target === CardDragSource.CARD_LIBRARY) {
+        setDeck(removeCardToDeck(cardDragged, deck));
+      }
     }
     setCardDraggedId(null);
   }
 
   function handleDragStart(event: DragStartEvent) {
-    setCardDraggedId(event.active.id);
+    setCardDraggedId((event.active.data.current as CardDragData).id);
   }
 
   return (
     <div className="h-full">
-      <P>Deck builder</P>
+      <Heading level={1} className="mx-auto">
+        Deck builder
+      </Heading>
 
       <div className="flex">
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
-          <CardLibrary cards={dummyCardLibrary} />
+          <CardLibrary cards={cardPool} />
 
           {/* Deck Overview */}
-          <div>
-            <Droppable id={'droppable'}>
-              <P>Deck goes here</P>
-            </Droppable>
-          </div>
+          <DeckOverview deck={deck} />
 
-          <DragOverlay>{cardDragged && <Card {...cardDragged} />}</DragOverlay>
+          <DragOverlay>
+            {cardDragged && <CardDisplay card={cardDragged} />}
+          </DragOverlay>
         </DndContext>
       </div>
     </div>
