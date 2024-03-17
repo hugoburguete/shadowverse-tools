@@ -6,19 +6,42 @@ export type HeadingProps = React.PropsWithChildren &
     /**
      * The level of the heading. e.g. Setting this to 1 outputs a h1 tag
      */
-    level: 1 | 2 | 3 | 4 | 5 | 6;
+    level: 1 | 2 | 3 | 4;
   };
 
 /**
  * UI component for heading
  */
 export const Heading = ({ children, level = 1, ...rest }: HeadingProps) => {
+  // h1: {
+  //   fontSize: em(30, 14),
+  //   marginTop: '0',
+  //   marginBottom: em(24, 30),
+  //   lineHeight: round(36 / 30),
+  // },
+  // h2: {
+  //   fontSize: em(20, 14),
+  //   marginTop: em(32, 20),
+  //   marginBottom: em(16, 20),
+  //   lineHeight: round(28 / 20),
+  // },
+  // h3: {
+  //   fontSize: em(18, 14),
+  //   marginTop: em(28, 18),
+  //   marginBottom: em(8, 18),
+  //   lineHeight: round(28 / 18),
+  // },
+  // h4: {
+  //   marginTop: em(20, 14),
+  //   marginBottom: em(8, 14),
+  //   lineHeight: round(20 / 14),
+  // },
   switch (level) {
     case 1:
       return (
         <h1
           {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
+          className={`text-3xl leading-9 mb-6 dark:text-white ${rest.className}`}
         >
           {children}
         </h1>
@@ -27,7 +50,7 @@ export const Heading = ({ children, level = 1, ...rest }: HeadingProps) => {
       return (
         <h2
           {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
+          className={`text-2xl leading-8 dark:text-white mb-4 ${rest.className}`}
         >
           {children}
         </h2>
@@ -36,7 +59,7 @@ export const Heading = ({ children, level = 1, ...rest }: HeadingProps) => {
       return (
         <h3
           {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
+          className={`text-xl leading-8 dark:text-white mb-4 ${rest.className}`}
         >
           {children}
         </h3>
@@ -45,28 +68,10 @@ export const Heading = ({ children, level = 1, ...rest }: HeadingProps) => {
       return (
         <h4
           {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
+          className={`text-md leading-8 dark:text-white mb-4 ${rest.className}`}
         >
           {children}
         </h4>
-      );
-    case 5:
-      return (
-        <h5
-          {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
-        >
-          {children}
-        </h5>
-      );
-    case 6:
-      return (
-        <h6
-          {...rest}
-          className={`text-80 text-center font-4 lh-6 ld-04 font-bold text-white mb-6 ${rest.className}`}
-        >
-          {children}
-        </h6>
       );
     default:
       return null;

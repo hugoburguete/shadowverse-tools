@@ -39,17 +39,3 @@ export const Heading4: Story = {
     level: 4,
   },
 };
-
-export const Heading5: Story = {
-  args: {
-    children: 'Heading 5',
-    level: 5,
-  },
-};
-
-export const Heading6: Story = {
-  args: {
-    children: 'Heading 6',
-    level: 6,
-  },
-};

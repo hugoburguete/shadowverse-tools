@@ -1,20 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ParagraphComponent from './Paragraph';
+import SmallComponent from './Small';
 
 const meta = {
-  title: 'Typography/Paragraph',
-  component: ParagraphComponent,
+  title: 'Typography/Small',
+  component: SmallComponent,
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof ParagraphComponent>;
+} satisfies Meta<typeof SmallComponent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Paragraph: Story = {
+export const Small: Story = {
   args: {
-    className: 'text-center',
     children:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Viverra orci sagittis eu volutpat odio facilisis mauris sit amet.',
   },
