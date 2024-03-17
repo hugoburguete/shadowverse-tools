@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import P from '../../components/typography/Paragraph';
 import { Card, CardProps } from '../../components/Card/Card';
 import CardLibrary from '../../components/CardLibrary';
+import Droppable from '../../components/dnd/Droppable/Droppable';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  UniqueIdentifier,
+} from '@dnd-kit/core';
 
 export type DeckBuilderProps = {};
 
 const DeckBuilder: React.FC<DeckBuilderProps> = () => {
+  const [cardDraggedId, setCardDraggedId] = useState<UniqueIdentifier | null>(
+    null
+  );
   const dummyCardLibrary: CardProps[] = [
     {
       cardId: 'BP01-116',
@@ -80,18 +91,40 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
       type: 'Spell',
     },
   ];
+
+  const cardDragged = dummyCardLibrary.find(
+    (card) => card.cardId === cardDraggedId
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    if (event.over && event.over.id === 'droppable') {
+      console.log('dropped');
+    }
+    setCardDraggedId(null);
+  }
+
+  function handleDragStart(event: DragStartEvent) {
+    setCardDraggedId(event.active.id);
+  }
+
   return (
-    <div>
+    <div className="h-full">
       <P>Deck builder</P>
 
       <div className="flex">
-        {/* Card library */}
-        <CardLibrary cards={dummyCardLibrary} />
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+          {/* Card library */}
+          <CardLibrary cards={dummyCardLibrary} />
 
-        {/* Deck Overview */}
-        <div>
-          <P>Deck goes here</P>
-        </div>
+          {/* Deck Overview */}
+          <div>
+            <Droppable id={'droppable'}>
+              <P>Deck goes here</P>
+            </Droppable>
+          </div>
+
+          <DragOverlay>{cardDragged && <Card {...cardDragged} />}</DragOverlay>
+        </DndContext>
       </div>
     </div>
   );
