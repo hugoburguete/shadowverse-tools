@@ -17,7 +17,12 @@ const Draggable = ({ children, id, data }: DraggableProps) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id, data });
 
   return (
-    <button ref={setNodeRef} {...listeners} {...attributes}>
+    <button
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="touch-none"
+    >
       {children}
     </button>
   );

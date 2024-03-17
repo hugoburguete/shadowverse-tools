@@ -1,10 +1,6 @@
-import { Card, CardDragSource } from '../../entities/card';
+import { CardDragSource, CardWithQuantity } from '../../entities/card';
 import { CardDisplay } from '../CardDisplay/CardDisplay';
 import Draggable from '../dnd/Draggable';
-
-type CardWithQuantity = Card & {
-  quantity: number;
-};
 
 export type CardListProps = {
   cards: CardWithQuantity[];

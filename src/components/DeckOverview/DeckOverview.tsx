@@ -1,38 +1,44 @@
-import { Card, CardDragSource } from '../../entities/card';
+import { Card, CardDragSource, Deck } from '../../entities/card';
 import CardList from '../CardList';
 import Droppable from '../dnd/Droppable';
 import P from '../typography/Paragraph';
 
 export type DeckOverviewProps = {
-  deck: Card[];
+  deck: Deck;
 };
 
 const DeckOverview: React.FC<DeckOverviewProps> = ({ deck }) => {
-  const cardsForDisplay = deck
-    // Add quantities
-    .map((c) => ({
-      ...c,
-      quantity: deck.filter((c2) => c2.cardId === c.cardId).length,
-    }))
-    // Get unique values
-    .filter(
-      (c, i) => deck.findIndex(({ cardId }) => cardId === c.cardId) === i
-    );
-
   return (
     <div>
       <Droppable id={CardDragSource.DECK}>
-        {/* No cards to display */}
-        {!deck.length && <P>No cards in your deck list</P>}
+        {/* Leader */}
+        <div className="grid grid-cols-6 gap-3 p-3 h-full">
+          {deck.leader && (
+            <CardList cards={[deck.leader]} source={CardDragSource.DECK} />
+          )}
+        </div>
 
-        {/* Deck list */}
-        {deck.length > 0 && (
-          <CardList
-            cards={cardsForDisplay}
-            source={CardDragSource.DECK}
-            showQuantity
-          />
-        )}
+        {/* Deck */}
+        <div className="grid grid-cols-6 gap-3 p-3 h-full">
+          {deck.deckList.length > 0 && (
+            <CardList
+              cards={deck.deckList}
+              source={CardDragSource.DECK}
+              showQuantity
+            />
+          )}
+        </div>
+
+        {/* Evolve deck */}
+        <div className="grid grid-cols-6 gap-3 p-3 h-full">
+          {deck.evolveList.length > 0 && (
+            <CardList
+              cards={deck.evolveList}
+              source={CardDragSource.DECK}
+              showQuantity
+            />
+          )}
+        </div>
       </Droppable>
     </div>
   );
