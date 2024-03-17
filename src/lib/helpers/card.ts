@@ -1,7 +1,7 @@
 import { Card, CardWithQuantity, Deck } from '../../entities/card';
 
-const LEADER_TYPES = ['Leader'];
-const EVOLVE_TYPES = ['Follower / Evolved'];
+export const LEADER_CARD_TYPES = ['Leader'];
+export const EVOLVE_CARD_TYPES = ['Follower / Evolved'];
 
 /**
  * Adds a card to a deck.
@@ -17,10 +17,10 @@ export const addCardToDeck = (
   restrictions: []
 ): Deck => {
   // TODO: restrictions
-  if (LEADER_TYPES.includes(card.type)) {
+  if (LEADER_CARD_TYPES.includes(card.type)) {
     // Add leader
     deck.leader = { ...card, quantity: 1 };
-  } else if (EVOLVE_TYPES.includes(card.type)) {
+  } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
     // Add evolve card
     deck.evolveList = addCardToCardList(card, deck.evolveList);
   } else {
@@ -64,12 +64,12 @@ const addCardToCardList = (
  * @returns A copy of the deck passed.
  */
 export const removeCardFromDeck = (card: Card, deck: Deck): Deck => {
-  if (LEADER_TYPES.includes(card.type)) {
+  if (LEADER_CARD_TYPES.includes(card.type)) {
     // Remove leader
     deck.leader = null;
-  } else if (EVOLVE_TYPES.includes(card.type)) {
+  } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
     // Remove evolve card
-    deck.deckList = removeCardFromCardList(card, deck.evolveList);
+    deck.evolveList = removeCardFromCardList(card, deck.evolveList);
   } else {
     // Add regular card
     deck.deckList = removeCardFromCardList(card, deck.deckList);

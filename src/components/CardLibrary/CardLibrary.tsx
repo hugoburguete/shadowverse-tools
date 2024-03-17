@@ -10,7 +10,7 @@ const CardLibrary = ({ cards }: CardLibraryProps) => {
   const cardsForDisplay = cards.map((c) => ({ ...c, quantity: 1 }));
 
   return (
-    <Droppable id="card-library">
+    <Droppable id={CardDragSource.CARD_LIBRARY}>
       <div className="grid grid-cols-2 w-96 gap-3 p-3 overflow-y-scroll">
         <CardList
           cards={cardsForDisplay}

@@ -1,4 +1,5 @@
 import { CardDragSource, CardWithQuantity } from '../../entities/card';
+import Badge from '../Badge';
 import { CardDisplay } from '../CardDisplay/CardDisplay';
 import Draggable from '../dnd/Draggable';
 
@@ -16,12 +17,14 @@ const CardList: React.FC<CardListProps> = ({
   return (
     <>
       {cards.map((card, index) => (
-        <div key={card.cardId}>
+        <div key={card.cardId} className="relative">
           <Draggable
             id={`${card.cardId}-${source}-${index}`}
-            data={{ id: card.cardId, source }}
+            data={{ id: card.cardId, source, type: card.type }}
           >
-            {showQuantity && <p>{card.quantity}</p>}
+            {showQuantity && (
+              <Badge className="absolute m-2">{card.quantity}</Badge>
+            )}
             <CardDisplay card={card} />
           </Draggable>
         </div>

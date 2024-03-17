@@ -23,9 +23,16 @@ export type Deck = {
 export enum CardDragSource {
   CARD_LIBRARY,
   DECK,
+  EVOLVE_DECK,
+  LEADER,
 }
 
 export type CardDragData = {
   id: string;
   source: CardDragSource;
+  type: string;
+};
+
+export type CardDropData = {
+  accepts?: string[];
 };

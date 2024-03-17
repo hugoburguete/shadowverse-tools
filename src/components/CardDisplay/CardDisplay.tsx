@@ -6,7 +6,7 @@ export type CardProps = {
 
 export const CardDisplay = ({ card: { image, name } }: CardProps) => {
   return (
-    <div>
+    <div className="w-full">
       <img src={image} alt={name} />
     </div>
   );

@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import CardDisplay from '../../components/CardDisplay';
-import CardLibrary from '../../components/CardLibrary';
 import {
   DndContext,
   DragEndEvent,
@@ -8,10 +5,19 @@ import {
   DragStartEvent,
   UniqueIdentifier,
 } from '@dnd-kit/core';
+import React, { useState } from 'react';
+import CardDisplay from '../../components/CardDisplay';
+import CardLibrary from '../../components/CardLibrary';
 import DeckOverview from '../../components/DeckOverview';
-import { Card, CardDragSource, CardDragData, Deck } from '../../entities/card';
-import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
 import Heading from '../../components/typography/Heading';
+import {
+  Card,
+  CardDragData,
+  CardDragSource,
+  CardDropData,
+  Deck,
+} from '../../entities/card';
+import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
 
 export type DeckBuilderProps = {};
 
@@ -65,13 +71,26 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   function handleDragEnd(event: DragEndEvent) {
-    const { source } = event.active.data.current as CardDragData;
-    if (event.over && cardDragged && event.over.id !== source) {
+    if (event.over && cardDragged) {
+      const dragData = event.active.data.current as CardDragData;
+      const dropData = event.over.data.current as CardDropData;
       const target = event.over.id as CardDragSource;
-      if (target === CardDragSource.DECK) {
-        setDeck(addCardToDeck(cardDragged, deck, []));
-      } else if (target === CardDragSource.CARD_LIBRARY) {
-        setDeck(removeCardFromDeck(cardDragged, deck));
+
+      console.log(
+        target,
+        dragData.source,
+        target === CardDragSource.CARD_LIBRARY
+      );
+
+      if (target !== dragData.source) {
+        if (
+          dropData?.accepts?.includes(dragData.type) ||
+          target === CardDragSource.DECK
+        ) {
+          setDeck(addCardToDeck(cardDragged, deck, []));
+        } else if (target === CardDragSource.CARD_LIBRARY) {
+          setDeck(removeCardFromDeck(cardDragged, deck));
+        }
       }
     }
     setCardDraggedId(null);
@@ -88,6 +107,7 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
       </Heading>
 
       <div className="flex">
+        {/* TODO: Add a pointer sensor so we can simply click the cards to add them in (https://github.com/clauderic/dnd-kit/issues/591#issuecomment-1017050816) */}
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
           <CardLibrary cards={cardPool} />
