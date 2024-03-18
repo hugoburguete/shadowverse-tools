@@ -7,7 +7,7 @@ export const Layout: React.FC<LayoutProps> = () => {
   return (
     <>
       <Header />
-      <main className="pt-20 bg-black">
+      <main className="pt-20 bg-vulcan">
         <Outlet />
       </main>
     </>

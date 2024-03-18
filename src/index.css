@@ -4,6 +4,6 @@
 
 @layer base {
 	body {
-		@apply dark:text-white dark:bg-black min-h-screen relative;
+		@apply dark:text-white dark:bg-vulcan min-h-screen relative;
 	}
 }
