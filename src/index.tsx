@@ -1,8 +1,16 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+
+const apolloClient = new ApolloClient({
+  uri: process.env.REACT_APP_API_ENDPOINT,
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -25,7 +33,9 @@ window
 
 root.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={apolloClient}>
+      <App />
+    </ApolloProvider>
   </React.StrictMode>
 );
 

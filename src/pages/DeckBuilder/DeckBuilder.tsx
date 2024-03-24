@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import {
   DndContext,
   DragEndEvent,
@@ -6,17 +7,18 @@ import {
   UniqueIdentifier,
 } from '@dnd-kit/core';
 import React, { useState } from 'react';
+import { Card } from '../../__generated__/graphql';
 import CardDisplay from '../../components/CardDisplay';
 import CardLibrary from '../../components/CardLibrary';
 import DeckOverview from '../../components/DeckOverview';
 import Heading from '../../components/typography/Heading';
 import {
-  Card,
   CardDragData,
   CardDragSource,
   CardDropData,
   Deck,
 } from '../../entities/card';
+import { QUERY_GET_CARDS } from '../../gql-queries/card';
 import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
 
 export type DeckBuilderProps = {};
@@ -25,49 +27,14 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   const [cardDraggedId, setCardDraggedId] = useState<UniqueIdentifier | null>(
     null
   );
+  const { loading, error, data } = useQuery(QUERY_GET_CARDS);
   const [deck, setDeck] = useState<Deck>({
     leader: null,
     deckList: [],
     evolveList: [],
   });
-  const cardPool: Card[] = [
-    {
-      cardId: 'BP01-116',
-      image: 'https://images.shadowcard.io/images/cards/BP01-116.jpg',
-      name: 'Soul Conversion',
-      class: 'Abbysscraft',
-      cost: 1,
-      trait: 'Departed',
-      type: 'Spell',
-    },
-    {
-      cardId: 'BP01-LD10',
-      image: 'https://images.shadowcard.io/images/cards/BP01-LD10.jpg',
-      name: 'Urias',
-      class: 'Abbysscraft',
-      type: 'Leader',
-    },
-    {
-      cardId: 'CP01-028',
-      image: 'https://images.shadowcard.io/images/cards/CP01-028.jpg',
-      name: 'Agnes Tachyon (Evolved)',
-      class: 'Runecraft',
-      trait: 'Umamusume',
-      type: 'Follower / Evolved',
-      attack: 3,
-      health: 3,
-    },
-    {
-      cardId: 'BP03-023',
-      image: 'https://images.shadowcard.io/images/cards/BP03-023.jpg',
-      name: 'Amerro, Spear Knight',
-      class: 'Swordcraft',
-      cost: 2,
-      trait: 'Officer / Heroic',
-      type: 'Follower',
-    },
-  ];
 
+  const cardPool: Card[] = data?.getCards ?? [];
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   function handleDragEnd(event: DragEndEvent) {
@@ -75,12 +42,6 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
       const dragData = event.active.data.current as CardDragData;
       const dropData = event.over.data.current as CardDropData;
       const target = event.over.id as CardDragSource;
-
-      console.log(
-        target,
-        dragData.source,
-        target === CardDragSource.CARD_LIBRARY
-      );
 
       if (target !== dragData.source) {
         if (
@@ -99,6 +60,9 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   function handleDragStart(event: DragStartEvent) {
     setCardDraggedId((event.active.data.current as CardDragData).id);
   }
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <div className="h-full">

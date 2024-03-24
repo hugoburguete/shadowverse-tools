@@ -1,4 +1,4 @@
-import { Card } from '../../entities/card';
+import { Card } from '../../__generated__/graphql';
 
 export type CardProps = {
   card: Card;

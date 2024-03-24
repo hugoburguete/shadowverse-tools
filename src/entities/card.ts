@@ -1,14 +1,4 @@
-export type Card = {
-  cardId: string;
-  name: string;
-  type: string;
-  class: string;
-  trait?: string;
-  cost?: number;
-  attack?: number;
-  health?: number;
-  image: string;
-};
+import { Card } from '../__generated__/graphql';
 
 export type CardWithQuantity = Card & {
   quantity: number;

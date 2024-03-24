@@ -1,4 +1,5 @@
-import { Card, CardDragSource } from '../../entities/card';
+import { Card } from '../../__generated__/graphql';
+import { CardDragSource } from '../../entities/card';
 import CardList from '../CardList';
 import Droppable from '../dnd/Droppable';
 

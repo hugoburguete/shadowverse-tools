@@ -25,6 +25,7 @@ export const CardDisplay: Story = {
       name: 'Urias',
       class: 'Abbysscraft',
       type: 'Leader',
+      rarity: 'LG',
     },
   },
 };

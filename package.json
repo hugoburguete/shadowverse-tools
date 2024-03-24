@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.9.9",
     "@dnd-kit/core": "^6.1.0",
     "@types/node": "^16.18.89",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
@@ -20,7 +23,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "codegen:compile": "graphql-codegen"
   },
   "browserslist": {
     "production": [
@@ -36,6 +40,9 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.2.22",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.4",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@storybook/addon-essentials": "^8.0.0",
     "@storybook/addon-interactions": "^8.0.0",
     "@storybook/addon-links": "^8.0.0",
@@ -50,7 +57,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^28.1.8",
     "prop-types": "^15.8.1",
     "storybook": "^8.0.0",
     "tailwindcss": "^3.4.1",
