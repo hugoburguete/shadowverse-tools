@@ -25,7 +25,7 @@ export type Card = {
   health?: Maybe<Scalars['Int']['output']>;
   image: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  rarity: Scalars['String']['output'];
+  rarity?: Maybe<Scalars['String']['output']>;
   trait?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
 };
@@ -46,7 +46,7 @@ export type QuerySearchCardsArgs = {
 export type GetCardsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCardsQuery = { __typename?: 'Query', getCards: Array<{ __typename?: 'Card', attack?: number | null, cardId: string, class: string, cost?: number | null, health?: number | null, image: string, name: string, rarity: string, trait?: string | null, type: string }> };
+export type GetCardsQuery = { __typename?: 'Query', getCards: Array<{ __typename?: 'Card', attack?: number | null, cardId: string, class: string, cost?: number | null, health?: number | null, image: string, name: string, rarity?: string | null, trait?: string | null, type: string }> };
 
 export type SearchCardsQueryVariables = Exact<{
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -55,7 +55,7 @@ export type SearchCardsQueryVariables = Exact<{
 }>;
 
 
-export type SearchCardsQuery = { __typename?: 'Query', searchCards: Array<{ __typename?: 'Card', attack?: number | null, cardId: string, class: string, cost?: number | null, health?: number | null, image: string, name: string, rarity: string, trait?: string | null, type: string }> };
+export type SearchCardsQuery = { __typename?: 'Query', searchCards: Array<{ __typename?: 'Card', attack?: number | null, cardId: string, class: string, cost?: number | null, health?: number | null, image: string, name: string, rarity?: string | null, trait?: string | null, type: string }> };
 
 
 export const GetCardsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attack"}},{"kind":"Field","name":{"kind":"Name","value":"cardId"}},{"kind":"Field","name":{"kind":"Name","value":"class"}},{"kind":"Field","name":{"kind":"Name","value":"cost"}},{"kind":"Field","name":{"kind":"Name","value":"health"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"trait"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]} as unknown as DocumentNode<GetCardsQuery, GetCardsQueryVariables>;

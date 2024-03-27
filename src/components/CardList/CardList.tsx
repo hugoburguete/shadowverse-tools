@@ -17,7 +17,7 @@ const CardList: React.FC<CardListProps> = ({
   return (
     <>
       {cards.map((card, index) => (
-        <div key={card.cardId} className="relative">
+        <div key={card.cardId} className="max-w-52 relative">
           <Draggable
             id={`${card.cardId}-${source}-${index}`}
             data={{ id: card.cardId, source, type: card.type }}

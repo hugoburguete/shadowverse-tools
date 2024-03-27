@@ -51,7 +51,7 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
           {/* Deck Overview */}
           <DeckOverview deck={deck} />
 
-          <DragOverlay>
+          <DragOverlay dropAnimation={null}>
             {cardDragged && <CardDisplay card={cardDragged} />}
           </DragOverlay>
         </DndContext>

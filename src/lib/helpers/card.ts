@@ -2,7 +2,7 @@ import { Card } from '../../__generated__/graphql';
 import { CardWithQuantity, Deck } from '../../entities/card';
 
 export const LEADER_CARD_TYPES = ['Leader'];
-export const EVOLVE_CARD_TYPES = ['Follower / Evolved'];
+export const EVOLVE_CARD_TYPES = ['Follower / Evolve'];
 
 /**
  * Adds a card to a deck.

@@ -32,13 +32,15 @@ const CardLibrary = ({ onCardSearch }: CardLibraryProps) => {
     : [];
 
   return (
-    <div className="flex flex-col">
-      <CardSearchForm onSubmit={onSubmit} />
+    <div className="w-full flex flex-col">
+      <div className="flex justify-center">
+        <CardSearchForm onSubmit={onSubmit} />
+      </div>
       <Droppable id={CardDragSource.CARD_LIBRARY}>
         {/* TODO: Loading bar */}
         {loading && <P>Loading</P>}
 
-        <div className="grid grid-cols-2 w-96 gap-3 p-3 overflow-y-scroll">
+        <div className="flex flex-wrap justify-center gap-3 p-3">
           <CardList
             cards={cardsForDisplay}
             source={CardDragSource.CARD_LIBRARY}
