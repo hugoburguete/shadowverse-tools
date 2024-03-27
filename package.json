@@ -24,7 +24,8 @@
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "codegen:compile": "graphql-codegen"
+    "codegen:compile": "graphql-codegen",
+    "codegen:watch": "graphql-codegen -w"
   },
   "browserslist": {
     "production": [
@@ -43,6 +44,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.4",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@parcel/watcher": "^2.4.1",
     "@storybook/addon-essentials": "^8.0.0",
     "@storybook/addon-interactions": "^8.0.0",
     "@storybook/addon-links": "^8.0.0",
