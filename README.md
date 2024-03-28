@@ -12,6 +12,9 @@ $ pnpm run codegen:compile
 
 # Start development environment
 $ pnpm run start
+
+# Start Storybook
+$ pnpm run storybook
 ```
 
 ## Deployment

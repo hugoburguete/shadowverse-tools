@@ -2,7 +2,7 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 import React, { useState } from 'react';
 import { Card } from '../../__generated__/graphql';
 import CardDisplay from '../../components/CardDisplay';
-import CardLibrary from '../../components/CardLibrary';
+import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
 import Heading from '../../components/typography/Heading';
 import { Deck } from '../../entities/card';
@@ -46,7 +46,7 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
         {/* TODO: Add a pointer sensor so we can simply click the cards to add them in (https://github.com/clauderic/dnd-kit/issues/591#issuecomment-1017050816) */}
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
-          <CardLibrary onCardSearch={setCardPool} />
+          <CardGallery onCardSearch={setCardPool} />
 
           {/* Deck Overview */}
           <DeckOverview deck={deck} />

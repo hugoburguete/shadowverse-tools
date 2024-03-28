@@ -8,11 +8,11 @@ import CardSearchForm from '../CardSearchForm';
 import Droppable from '../dnd/Droppable';
 import P from '../typography/Paragraph';
 
-export type CardLibraryProps = {
+export type CardGalleryProps = {
   onCardSearch: (cards: Card[]) => void;
 };
 
-const CardLibrary = ({ onCardSearch }: CardLibraryProps) => {
+const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
   const [variables, setVariables] = useState<QuerySearchCardsArgs>({
     searchTerm: '',
   });
@@ -25,8 +25,6 @@ const CardLibrary = ({ onCardSearch }: CardLibraryProps) => {
     onCardSearch(data?.searchCards ?? []);
   }, [data, onCardSearch]);
 
-  // TODO: Error message
-  if (error) return <p>Error : {error.message}</p>;
   const cardsForDisplay = data?.searchCards
     ? data.searchCards.map((c) => ({ ...c, quantity: 1 }))
     : [];
@@ -40,15 +38,16 @@ const CardLibrary = ({ onCardSearch }: CardLibraryProps) => {
         {/* TODO: Loading bar */}
         {loading && <P>Loading</P>}
 
-        <div className="flex flex-wrap justify-center gap-3 p-3">
-          <CardList
-            cards={cardsForDisplay}
-            source={CardDragSource.CARD_LIBRARY}
-          />
-        </div>
+        {/* TODO: Format error messages */}
+        {error && <P>Error : {error.message}</P>}
+
+        <CardList
+          cards={cardsForDisplay}
+          source={CardDragSource.CARD_LIBRARY}
+        />
       </Droppable>
     </div>
   );
 };
 
-export default CardLibrary;
+export default CardGallery;

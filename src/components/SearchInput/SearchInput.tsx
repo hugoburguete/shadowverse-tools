@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react';
+import throttle from 'lodash.throttle';
+import { useCallback, useState } from 'react';
+import Input from '../forms/Input';
 
-export type SearchInputProps = {
+export type SearchInputProps = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & {
   searchTerm?: string;
   onSearch: (searchTerm: string) => void;
 };
@@ -8,22 +13,21 @@ export type SearchInputProps = {
 const SearchInput: React.FC<SearchInputProps> = ({
   searchTerm: initialSearchTerm,
   onSearch,
+  ...rest
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '');
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onSearch(searchTerm);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [searchTerm, onSearch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const throttledOnSearch = useCallback(
+    throttle((searchTerm) => onSearch(searchTerm), 750),
+    [onSearch]
+  );
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    throttledOnSearch(e.target.value);
   };
 
-  return <input type="text" value={searchTerm} onChange={onChange} />;
+  return <Input type="text" value={searchTerm} onChange={onChange} {...rest} />;
 };
 
 export default SearchInput;

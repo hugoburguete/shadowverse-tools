@@ -15,7 +15,7 @@ const CardList: React.FC<CardListProps> = ({
   showQuantity = false,
 }) => {
   return (
-    <>
+    <div className="flex flex-wrap justify-center gap-3 p-3">
       {cards.map((card, index) => (
         <div key={card.cardId} className="max-w-52 relative">
           <Draggable
@@ -29,7 +29,7 @@ const CardList: React.FC<CardListProps> = ({
           </Draggable>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
