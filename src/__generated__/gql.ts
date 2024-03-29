@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetCards {\n    getCards {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n": types.GetCardsDocument,
-    "\n  query SearchCards($searchTerm: String, $cost: [Int!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n": types.SearchCardsDocument,
+    "\n  query SearchCards($searchTerm: String, $cost: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, types: $types, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n": types.SearchCardsDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function gql(source: "\n  query GetCards {\n    getCards {\n      attack\
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query SearchCards($searchTerm: String, $cost: [Int!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"): (typeof documents)["\n  query SearchCards($searchTerm: String, $cost: [Int!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"];
+export function gql(source: "\n  query SearchCards($searchTerm: String, $cost: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, types: $types, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"): (typeof documents)["\n  query SearchCards($searchTerm: String, $cost: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, types: $types, skip: $skip, take: $take) {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

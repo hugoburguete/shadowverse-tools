@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { QuerySearchCardsArgs } from '../../__generated__/graphql';
+import { toggleArrayItem } from '../../lib/array';
 import SearchInput from '../SearchInput';
 import Checkbox from '../forms/Checkbox';
 import FormGroup from '../forms/FormGroup';
@@ -12,11 +13,14 @@ export type CardSearchFormProps = {
 const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [cost, setCost] = useState<number[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
 
   const doSearch = () => {
     onSubmit({
       searchTerm,
       cost,
+      types: selectedTypes,
       skip: 0,
       take: 10,
     });
@@ -26,10 +30,11 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
     onSubmit({
       searchTerm,
       cost,
+      types: selectedTypes,
       skip: 0,
       take: 10,
     });
-  }, [searchTerm, cost, onSubmit]);
+  }, [searchTerm, cost, selectedTypes, onSubmit]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -41,15 +46,11 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   };
 
   const onCostSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const costNum = parseInt(e.target.value);
-    const index = cost.indexOf(costNum);
-    if (index > -1) {
-      setCost([...cost.slice(0, index), ...cost.slice(index + 1, cost.length)]);
-    } else {
-      let newCost = [...cost];
-      newCost.push(costNum);
-      setCost(newCost);
-    }
+    setCost(toggleArrayItem(parseInt(e.target.value), cost));
+  };
+
+  const onTypeSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSelectedTypes(toggleArrayItem(e.target.value, selectedTypes));
   };
 
   return (
@@ -66,12 +67,27 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
             key={`filter-cost-${costNum}`}
             name="cost"
             value={costNum}
-            data-test={cost.includes(costNum)}
             checked={cost.includes(costNum)}
             onChange={onCostSelected}
           >
             {costNum}
             {costNum === 8 ? '+' : ''}
+          </Checkbox>
+        ))}
+      </FormGroup>
+
+      <FormGroup>
+        <Label htmlFor="card-search-form">Type: </Label>
+        {cardTypes.map((type) => (
+          <Checkbox
+            id={`filter-type-${type}`}
+            key={`filter-type-${type}`}
+            name="cost"
+            value={type}
+            checked={selectedTypes.includes(type)}
+            onChange={onTypeSelected}
+          >
+            {type}
           </Checkbox>
         ))}
       </FormGroup>

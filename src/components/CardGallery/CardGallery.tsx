@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, QuerySearchCardsArgs } from '../../__generated__/graphql';
 import { CardDragSource } from '../../entities/card';
 import { QUERY_SEARCH_CARDS } from '../../gql-queries/card';
@@ -16,11 +16,15 @@ const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
   const [variables, setVariables] = useState<QuerySearchCardsArgs>({
     searchTerm: '',
     cost: [],
+    types: [],
   });
   const { loading, error, data } = useQuery(QUERY_SEARCH_CARDS, { variables });
-  const onSubmit = (searchArgs: QuerySearchCardsArgs) => {
-    setVariables(searchArgs);
-  };
+  const onSubmit = useCallback(
+    (searchArgs: QuerySearchCardsArgs) => {
+      setVariables(searchArgs);
+    },
+    [setVariables]
+  );
 
   useEffect(() => {
     onCardSearch(data?.searchCards ?? []);
