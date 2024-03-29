@@ -15,6 +15,7 @@ export type CardGalleryProps = {
 const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
   const [variables, setVariables] = useState<QuerySearchCardsArgs>({
     searchTerm: '',
+    cost: [],
   });
   const { loading, error, data } = useQuery(QUERY_SEARCH_CARDS, { variables });
   const onSubmit = (searchArgs: QuerySearchCardsArgs) => {
