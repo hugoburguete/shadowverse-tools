@@ -1,6 +1,8 @@
-import { Card } from '../__generated__/graphql';
+import { CardSearchResultFragment } from '../gql/generated/graphql';
 
-export type CardWithQuantity = Card & {
+export type CardSimplified = CardSearchResultFragment;
+
+export type CardWithQuantity = CardSimplified & {
   quantity: number;
 };
 

@@ -1,15 +1,27 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  from,
+} from '@apollo/client';
+import { createFragmentRegistry } from '@apollo/client/cache';
+import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { FRAGMENT_SEARCH_CARDS } from './gql/queries/card';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+const httpLink = new HttpLink({ uri: process.env.REACT_APP_API_ENDPOINT });
+const removeTypenameLink = removeTypenameFromVariables();
+const link = from([removeTypenameLink, httpLink]);
 const apolloClient = new ApolloClient({
-  uri: process.env.REACT_APP_API_ENDPOINT,
   cache: new InMemoryCache({
-    addTypename: false,
+    fragments: createFragmentRegistry(FRAGMENT_SEARCH_CARDS),
   }),
+  link,
 });
 
 const root = ReactDOM.createRoot(

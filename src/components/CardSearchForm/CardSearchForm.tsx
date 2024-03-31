@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
-import { QuerySearchCardsArgs } from '../../__generated__/graphql';
+import { useQuery } from '@apollo/client';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { QuerySearchCardsArgs } from '../../gql/generated/graphql';
+import { QUERY_GET_EXPANSIONS } from '../../gql/queries/expansion';
 import { toggleArrayItem } from '../../lib/array';
 import SearchInput from '../SearchInput';
 import Checkbox from '../forms/Checkbox';
@@ -12,15 +14,21 @@ export type CardSearchFormProps = {
 
 const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [cost, setCost] = useState<number[]>([]);
+  const [selectedCosts, setSelectedCosts] = useState<number[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedExpansions, setSelectedExpansions] = useState<number[]>([]);
   const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
+  const { loading, data } = useQuery(QUERY_GET_EXPANSIONS, {
+    variables: { take: 10 },
+  });
+  const expansions = data?.expansions ?? [];
 
   const doSearch = () => {
     onSubmit({
       searchTerm,
-      cost,
+      cost: selectedCosts,
       types: selectedTypes,
+      expansions: selectedExpansions,
       skip: 0,
       take: 10,
     });
@@ -29,12 +37,13 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   useEffect(() => {
     onSubmit({
       searchTerm,
-      cost,
+      cost: selectedCosts,
       types: selectedTypes,
+      expansions: selectedExpansions,
       skip: 0,
       take: 10,
     });
-  }, [searchTerm, cost, selectedTypes, onSubmit]);
+  }, [searchTerm, selectedCosts, selectedTypes, selectedExpansions, onSubmit]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -45,12 +54,18 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
     setSearchTerm(() => searchTerm);
   };
 
-  const onCostSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setCost(toggleArrayItem(parseInt(e.target.value), cost));
+  const onCostSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedCosts(toggleArrayItem(parseInt(e.target.value), selectedCosts));
   };
 
-  const onTypeSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const onTypeSelected = (e: ChangeEvent<HTMLInputElement>): void => {
     setSelectedTypes(toggleArrayItem(e.target.value, selectedTypes));
+  };
+
+  const onExpansionSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedExpansions(
+      toggleArrayItem(parseInt(e.target.value), selectedExpansions)
+    );
   };
 
   return (
@@ -67,7 +82,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
             key={`filter-cost-${costNum}`}
             name="cost"
             value={costNum}
-            checked={cost.includes(costNum)}
+            checked={selectedCosts.includes(costNum)}
             onChange={onCostSelected}
           >
             {costNum}
@@ -91,6 +106,24 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
           </Checkbox>
         ))}
       </FormGroup>
+
+      {!loading && (
+        <FormGroup>
+          <Label htmlFor="card-search-form-expansion">Set: </Label>
+          {expansions.map((expansion) => (
+            <Checkbox
+              id={`filter-expansion-${expansion.id}`}
+              key={`filter-expansion-${expansion.id}`}
+              name="expansion"
+              value={expansion.id}
+              checked={selectedExpansions.includes(expansion.id)}
+              onChange={onExpansionSelected}
+            >
+              {expansion.name}
+            </Checkbox>
+          ))}
+        </FormGroup>
+      )}
     </form>
   );
 };

@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
-import { Card, QuerySearchCardsArgs } from '../../__generated__/graphql';
-import { CardDragSource } from '../../entities/card';
-import { QUERY_SEARCH_CARDS } from '../../gql-queries/card';
+import { CardDragSource, CardSimplified } from '../../entities/card';
+import { QuerySearchCardsArgs } from '../../gql/generated/graphql';
+import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
 import CardList from '../CardList';
 import CardSearchForm from '../CardSearchForm';
 import Droppable from '../dnd/Droppable';
 import P from '../typography/Paragraph';
 
 export type CardGalleryProps = {
-  onCardSearch: (cards: Card[]) => void;
+  onCardSearch: (cards: CardSimplified[]) => void;
 };
 
 const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
@@ -30,7 +30,7 @@ const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
     onCardSearch(data?.searchCards ?? []);
   }, [data, onCardSearch]);
 
-  const cardsForDisplay = data?.searchCards
+  const cardsForDisplay = data
     ? data.searchCards.map((c) => ({ ...c, quantity: 1 }))
     : [];
 

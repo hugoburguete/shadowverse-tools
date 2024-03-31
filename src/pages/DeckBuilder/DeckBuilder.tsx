@@ -1,18 +1,17 @@
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import React, { useState } from 'react';
-import { Card } from '../../__generated__/graphql';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
 import Heading from '../../components/typography/Heading';
-import { Deck } from '../../entities/card';
+import { CardSimplified, Deck } from '../../entities/card';
 import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
 import useCardDragAndDrop from './useCardDragAndDrop';
 
 export type DeckBuilderProps = {};
 
 const DeckBuilder: React.FC<DeckBuilderProps> = () => {
-  const [cardPool, setCardPool] = useState<Card[]>([]);
+  const [cardPool, setCardPool] = useState<CardSimplified[]>([]);
   const [deck, setDeck] = useState<Deck>({
     leader: null,
     deckList: [],

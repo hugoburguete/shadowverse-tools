@@ -1,5 +1,4 @@
-import { Card } from '../../__generated__/graphql';
-import { CardWithQuantity, Deck } from '../../entities/card';
+import { CardSimplified, CardWithQuantity, Deck } from '../../entities/card';
 
 export const LEADER_CARD_TYPES = ['Leader'];
 export const EVOLVE_CARD_TYPES = ['Follower / Evolve'];
@@ -8,12 +7,11 @@ export const EVOLVE_CARD_TYPES = ['Follower / Evolve'];
  * Adds a card to a deck.
  *
  * @param card The card to add
- * @param deck The current deck
- * @param restrictions Restrictions in the format.
+ * @param deck The current deck @param restrictions Restrictions in the format.
  * @returns A modified version of the deck passed.
  */
 export const addCardToDeck = (
-  card: Card,
+  card: CardSimplified,
   deck: Deck,
   restrictions: []
 ): Deck => {
@@ -33,12 +31,10 @@ export const addCardToDeck = (
 
 /**
  * Adds a card to a card stack.
- * @param card
- * @param cardList
- * @returns
+ * @param card @param cardList @returns
  */
 const addCardToCardList = (
-  card: Card,
+  card: CardSimplified,
   cardList: CardWithQuantity[]
 ): CardWithQuantity[] => {
   const index = cardList.findIndex((c) => c.cardId === card.cardId);
@@ -61,10 +57,9 @@ const addCardToCardList = (
  * Removes a card from a deck.
  *
  * @param card The card to remove
- * @param deck The current deck
- * @returns A copy of the deck passed.
+ * @param deck The current deck @returns A copy of the deck passed.
  */
-export const removeCardFromDeck = (card: Card, deck: Deck): Deck => {
+export const removeCardFromDeck = (card: CardSimplified, deck: Deck): Deck => {
   if (LEADER_CARD_TYPES.includes(card.type)) {
     // Remove leader
     deck.leader = null;
@@ -81,12 +76,10 @@ export const removeCardFromDeck = (card: Card, deck: Deck): Deck => {
 
 /**
  * Removes a card from a card stack.
- * @param card
- * @param cardList
- * @returns
+ * @param card @param cardList @returns
  */
 const removeCardFromCardList = (
-  card: Card,
+  card: CardSimplified,
   cardList: CardWithQuantity[]
 ): CardWithQuantity[] => {
   const index = cardList.findIndex((c) => c.cardId === card.cardId);

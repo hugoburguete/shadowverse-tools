@@ -1,7 +1,7 @@
-import { Card } from '../../__generated__/graphql';
+import { CardSimplified } from '../../entities/card';
 
 export type CardProps = {
-  card: Card;
+  card: CardSimplified;
 };
 
 export const CardDisplay = ({ card: { image, name } }: CardProps) => {
