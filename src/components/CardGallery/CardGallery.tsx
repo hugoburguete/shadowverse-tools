@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
 import { CardDragSource, CardSimplified } from '../../entities/card';
-import { QuerySearchCardsArgs } from '../../gql/generated/graphql';
+import { QueryCardsArgs } from '../../gql/generated/graphql';
 import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
 import CardList from '../CardList';
 import CardSearchForm from '../CardSearchForm';
@@ -13,25 +13,25 @@ export type CardGalleryProps = {
 };
 
 const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
-  const [variables, setVariables] = useState<QuerySearchCardsArgs>({
+  const [variables, setVariables] = useState<QueryCardsArgs>({
     searchTerm: '',
     cost: [],
     types: [],
   });
   const { loading, error, data } = useQuery(QUERY_SEARCH_CARDS, { variables });
   const onSubmit = useCallback(
-    (searchArgs: QuerySearchCardsArgs) => {
+    (searchArgs: QueryCardsArgs) => {
       setVariables(searchArgs);
     },
     [setVariables]
   );
 
   useEffect(() => {
-    onCardSearch(data?.searchCards ?? []);
+    onCardSearch(data?.cards ?? []);
   }, [data, onCardSearch]);
 
   const cardsForDisplay = data
-    ? data.searchCards.map((c) => ({ ...c, quantity: 1 }))
+    ? data.cards.map((c) => ({ ...c, quantity: 1 }))
     : [];
 
   return (

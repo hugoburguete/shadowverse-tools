@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { QuerySearchCardsArgs } from '../../gql/generated/graphql';
+import { QueryCardsArgs } from '../../gql/generated/graphql';
 import { QUERY_GET_EXPANSIONS } from '../../gql/queries/expansion';
 import { toggleArrayItem } from '../../lib/array';
 import SearchInput from '../SearchInput';
@@ -9,7 +9,7 @@ import FormGroup from '../forms/FormGroup';
 import Label from '../forms/Label';
 
 export type CardSearchFormProps = {
-  onSubmit: (searchArgs: QuerySearchCardsArgs) => void;
+  onSubmit: (searchArgs: QueryCardsArgs) => void;
 };
 
 const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {

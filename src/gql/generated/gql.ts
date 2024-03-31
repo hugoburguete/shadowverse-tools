@@ -13,9 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  query GetCards {\n    getCards {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n": types.GetCardsDocument,
     "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity\n    trait\n    type\n  }\n": types.CardSearchResultFragmentDoc,
-    "\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n": types.SearchCardsDocument,
+    "\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n": types.SearchCardsDocument,
     "\n  query GetExpansions($take: Int) {\n    expansions(take: $take) {\n      id\n      name\n    }\n  }\n": types.GetExpansionsDocument,
 };
 
@@ -36,15 +35,11 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetCards {\n    getCards {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"): (typeof documents)["\n  query GetCards {\n    getCards {\n      attack\n      cardId\n      class\n      cost\n      health\n      image\n      name\n      rarity\n      trait\n      type\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function gql(source: "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity\n    trait\n    type\n  }\n"): (typeof documents)["\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity\n    trait\n    type\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n"): (typeof documents)["\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    searchCards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n"];
+export function gql(source: "\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n"): (typeof documents)["\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {\n    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
