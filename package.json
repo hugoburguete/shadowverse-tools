@@ -1,5 +1,6 @@
 {
   "name": "shadowverse-tools",
+  "description": "The web interface for the Shadowverse Evolve tools app.",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
