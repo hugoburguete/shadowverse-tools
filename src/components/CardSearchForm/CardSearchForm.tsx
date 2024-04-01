@@ -19,7 +19,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   const [selectedExpansions, setSelectedExpansions] = useState<number[]>([]);
   const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
   const { loading, data } = useQuery(QUERY_GET_EXPANSIONS, {
-    variables: { take: 10 },
+    variables: { take: 12 },
   });
   const expansions = data?.expansions ?? [];
 
@@ -30,7 +30,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
       types: selectedTypes,
       expansions: selectedExpansions,
       skip: 0,
-      take: 10,
+      take: 12,
     });
   };
 
@@ -41,7 +41,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
       types: selectedTypes,
       expansions: selectedExpansions,
       skip: 0,
-      take: 10,
+      take: 12,
     });
   }, [searchTerm, selectedCosts, selectedTypes, selectedExpansions, onSubmit]);
 

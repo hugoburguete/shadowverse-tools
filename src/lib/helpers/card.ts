@@ -59,16 +59,28 @@ const addCardToCardList = (
  * @param card The card to remove
  * @param deck The current deck @returns A copy of the deck passed.
  */
-export const removeCardFromDeck = (card: CardSimplified, deck: Deck): Deck => {
-  if (LEADER_CARD_TYPES.includes(card.type)) {
+export const removeCardFromDeck = (cardId: string, deck: Deck): Deck => {
+  if (deck.leader?.cardId === cardId) {
     // Remove leader
     deck.leader = null;
-  } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
-    // Remove evolve card
-    deck.evolveList = removeCardFromCardList(card, deck.evolveList);
   } else {
-    // Add regular card
-    deck.deckList = removeCardFromCardList(card, deck.deckList);
+    let card;
+
+    card = deck.evolveList.find((evolveCard) => evolveCard.cardId === cardId);
+
+    if (card) {
+      // Remove evolve card
+      deck.evolveList = removeCardFromCardList(card, deck.evolveList);
+    } else {
+      card = deck.deckList.find((deckCard) => deckCard.cardId === cardId);
+
+      if (!card) {
+        throw new Error("Deck doesn't contain this card");
+      }
+
+      // Add regular card
+      deck.deckList = removeCardFromCardList(card, deck.deckList);
+    }
   }
 
   return deck;
@@ -92,8 +104,6 @@ const removeCardFromCardList = (
       // Update quantity
       cardList[index].quantity -= 1;
     }
-  } else {
-    throw new Error("Deck doesn't contain this card");
   }
 
   return cardList;

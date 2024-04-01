@@ -6,8 +6,8 @@ export type CardProps = {
 
 export const CardDisplay = ({ card: { image, name } }: CardProps) => {
   return (
-    <div className="w-full">
-      <img src={image} alt={name} />
+    <div className="h-0 pb-[140%] relative w-full">
+      <img className="w-full h-full block absolute" src={image} alt={name} />
     </div>
   );
 };

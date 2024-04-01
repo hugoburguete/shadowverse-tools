@@ -25,27 +25,24 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
         setDeck(addCardToDeck(card, deck, []));
       }
     },
-    (cardId) => {
-      const card = cardPool.find((card) => card.cardId === cardId);
-      if (card) {
-        setDeck(removeCardFromDeck(card, deck));
-      }
-    }
+    (cardId) => setDeck(removeCardFromDeck(cardId as string, deck))
   );
 
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   return (
-    <div className="h-full">
-      <Heading level={1} className="text-center">
-        Deck builder
-      </Heading>
-
-      <div className="flex">
+    <div className="min-h-full">
+      <div className="flex items-start">
         {/* TODO: Add a pointer sensor so we can simply click the cards to add them in (https://github.com/clauderic/dnd-kit/issues/591#issuecomment-1017050816) */}
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
-          <CardGallery onCardSearch={setCardPool} />
+          <div className="w-full">
+            <Heading level={1} className="text-center">
+              Deck builder
+            </Heading>
+
+            <CardGallery onCardSearch={setCardPool} />
+          </div>
 
           {/* Deck Overview */}
           <DeckOverview deck={deck} />

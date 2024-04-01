@@ -17,6 +17,7 @@ const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
     searchTerm: '',
     cost: [],
     types: [],
+    take: 12,
   });
   const { loading, error, data } = useQuery(QUERY_SEARCH_CARDS, { variables });
   const onSubmit = useCallback(
@@ -36,7 +37,7 @@ const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
 
   return (
     <div className="w-full flex flex-col">
-      <div className="flex justify-center">
+      <div className="flex">
         <CardSearchForm onSubmit={onSubmit} />
       </div>
       <Droppable id={CardDragSource.CARD_LIBRARY}>

@@ -1,6 +1,6 @@
 import { CardDragSource, CardWithQuantity } from '../../../../entities/card';
-import Badge from '../../../Badge';
 import Draggable from '../../../dnd/Draggable';
+import P from '../../../typography/Paragraph';
 
 export type CardListItemProps = {
   card: CardWithQuantity;
@@ -8,13 +8,23 @@ export type CardListItemProps = {
 
 const CardListItem: React.FC<CardListItemProps> = ({ card }) => {
   return (
-    <li>
+    <li className="w-full">
       <Draggable
+        style={{ backgroundImage: `url(${card.image})` }}
+        className="relative block p-2 pl-[45px] w-full border-vulcan-900 border text-left bg-center bg-cover"
         id={`${card.cardId}-${CardDragSource.DECK}`}
         data={{ id: card.cardId, source: CardDragSource.DECK, type: card.type }}
       >
-        <Badge className="absolute m-2">{card.quantity}</Badge>/
-        <span>{card.name}</span>/<span>x{card.quantity}</span>
+        <p className="absolute left-0 top-0 bottom-0 text-center w-[45px]">
+          <span className="text-white block mb-0 leading-1">
+            {card.type ? card.cost : ''}
+          </span>
+          <span className="text-white block text-xs">Bronze</span>
+        </p>
+        <P
+          className="overflow-hidden block text-ellipsis whitespace-nowrap"
+          style={{ width: 'calc(80%)' }}
+        >{`${card.quantity}x ${card.name}`}</P>
       </Draggable>
     </li>
   );

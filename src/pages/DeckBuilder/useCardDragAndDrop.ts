@@ -1,32 +1,24 @@
-import { DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { useState } from 'react';
-import {
-  CardDragData,
-  CardDragSource,
-  CardDropData,
-} from '../../entities/card';
+import { CardDragData, CardDragSource } from '../../entities/card';
 
-type CardMoveEvent = (cardId: UniqueIdentifier | null) => void;
+type CardMoveEvent = (cardId: string) => void;
 
 const useCardDragAndDrop = (
   onAddCardToDeck: CardMoveEvent,
   onRemoveCardFromDeck: CardMoveEvent
 ) => {
-  const [cardDraggedId, setCardDraggedId] = useState<UniqueIdentifier | null>(
-    null
-  );
+  const [cardDraggedId, setCardDraggedId] = useState<string | null>(null);
 
   function handleDragEnd(event: DragEndEvent) {
+    // Are we dragging a card?
     if (event.over && cardDraggedId) {
       const dragData = event.active.data.current as CardDragData;
-      const dropData = event.over.data.current as CardDropData;
       const target = event.over.id as CardDragSource;
 
+      // Is the droppable area valid?
       if (target !== dragData.source) {
-        if (
-          dropData?.accepts?.includes(dragData.type) ||
-          target === CardDragSource.DECK
-        ) {
+        if (target === CardDragSource.DECK) {
           onAddCardToDeck(cardDraggedId);
         } else if (target === CardDragSource.CARD_LIBRARY) {
           onRemoveCardFromDeck(cardDraggedId);

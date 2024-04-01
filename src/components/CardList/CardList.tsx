@@ -15,12 +15,13 @@ const CardList: React.FC<CardListProps> = ({
   showQuantity = false,
 }) => {
   return (
-    <div className="flex flex-wrap justify-center gap-3 p-3">
+    <div className="flex flex-wrap gap-3 p-3">
       {cards.map((card, index) => (
-        <div key={card.cardId} className="max-w-52 relative">
+        <div key={card.cardId} className="max-w-52 relative w-full">
           <Draggable
             id={`${card.cardId}-${source}-${index}`}
             data={{ id: card.cardId, source, type: card.type }}
+            className="w-full"
           >
             {showQuantity && (
               <Badge className="absolute m-2">{card.quantity}</Badge>
