@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { QueryCardsArgs } from '../../gql/generated/graphql';
-import { QUERY_GET_EXPANSIONS } from '../../gql/queries/expansion';
+import { QUERY_GET_FILTER_DATA } from '../../gql/queries/expansion';
 import { toggleArrayItem } from '../../lib/array';
 import SearchInput from '../SearchInput';
 import Checkbox from '../forms/Checkbox';
@@ -17,11 +17,13 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   const [selectedCosts, setSelectedCosts] = useState<number[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedExpansions, setSelectedExpansions] = useState<number[]>([]);
+  const [selectedRarities, setSelectedRarities] = useState<number[]>([]);
   const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
-  const { loading, data } = useQuery(QUERY_GET_EXPANSIONS, {
+  const { loading, data } = useQuery(QUERY_GET_FILTER_DATA, {
     variables: { take: 12 },
   });
   const expansions = data?.expansions ?? [];
+  const rarities = data?.rarities ?? [];
 
   const doSearch = () => {
     onSubmit({
@@ -29,6 +31,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
       cost: selectedCosts,
       types: selectedTypes,
       expansions: selectedExpansions,
+      rarities: selectedRarities,
       skip: 0,
       take: 12,
     });
@@ -40,10 +43,18 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
       cost: selectedCosts,
       types: selectedTypes,
       expansions: selectedExpansions,
+      rarities: selectedRarities,
       skip: 0,
       take: 12,
     });
-  }, [searchTerm, selectedCosts, selectedTypes, selectedExpansions, onSubmit]);
+  }, [
+    searchTerm,
+    selectedCosts,
+    selectedTypes,
+    selectedExpansions,
+    selectedRarities,
+    onSubmit,
+  ]);
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -65,6 +76,12 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
   const onExpansionSelected = (e: ChangeEvent<HTMLInputElement>): void => {
     setSelectedExpansions(
       toggleArrayItem(parseInt(e.target.value), selectedExpansions)
+    );
+  };
+
+  const onRaritySelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedRarities(
+      toggleArrayItem(parseInt(e.target.value), selectedRarities)
     );
   };
 
@@ -120,6 +137,24 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
               onChange={onExpansionSelected}
             >
               {expansion.name}
+            </Checkbox>
+          ))}
+        </FormGroup>
+      )}
+
+      {!loading && (
+        <FormGroup>
+          <Label htmlFor="card-search-form-expansion">Rarity: </Label>
+          {rarities.map((rarity) => (
+            <Checkbox
+              id={`filter-rarity-${rarity.id}`}
+              key={`filter-rarity-${rarity.id}`}
+              name="rarity"
+              value={rarity.id}
+              checked={selectedRarities.includes(rarity.id)}
+              onChange={onRaritySelected}
+            >
+              {rarity.name}
             </Checkbox>
           ))}
         </FormGroup>

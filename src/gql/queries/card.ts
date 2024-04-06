@@ -9,15 +9,17 @@ export const FRAGMENT_SEARCH_CARDS = gql(`
     health
     image
     name
-    rarity
+    rarity {
+      acronym
+    }
     trait
     type
   }
 `);
 
 export const QUERY_SEARCH_CARDS = gql(`
-  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int) {
-    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, types: $types, skip: $skip, take: $take) {
+  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int, $rarities: [Int!]) {
+    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, rarities: $rarities, types: $types, skip: $skip, take: $take) {
       ...CardSearchResult
     }
   }

@@ -18,7 +18,7 @@ const meta = {
           name: 'Urias',
           class: 'Abbysscraft',
           type: 'Leader',
-          rarity: 'LG',
+          rarity: { acronym: 'LG' },
         }}
       />
     </div>

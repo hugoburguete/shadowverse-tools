@@ -19,7 +19,9 @@ const CardListItem: React.FC<CardListItemProps> = ({ card }) => {
           <span className="text-white block mb-0 leading-1">
             {card.type ? card.cost : ''}
           </span>
-          <span className="text-white block text-xs">Bronze</span>
+          <span className="text-white block text-xs">
+            {card.rarity.acronym}
+          </span>
         </p>
         <P
           className="overflow-hidden block text-ellipsis whitespace-nowrap"
