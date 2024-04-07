@@ -4,8 +4,9 @@ import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
 import Heading from '../../components/typography/Heading';
-import { CardSimplified, Deck } from '../../entities/card';
+import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
 import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
+import { getValidator } from '../../lib/validators';
 import useCardDragAndDrop from './useCardDragAndDrop';
 
 export type DeckBuilderProps = {};
@@ -13,6 +14,7 @@ export type DeckBuilderProps = {};
 const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   const [cardPool, setCardPool] = useState<CardSimplified[]>([]);
   const [deck, setDeck] = useState<Deck>({
+    format: 'standard',
     leader: null,
     deckList: [],
     evolveList: [],
@@ -22,11 +24,15 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
     (cardId) => {
       const card = cardPool.find((card) => card.cardId === cardId);
       if (card) {
-        setDeck(addCardToDeck(card, deck, []));
+        setDeck(addCardToDeck(card, deck));
       }
     },
     (cardId) => setDeck(removeCardFromDeck(cardId as string, deck))
   );
+
+  const onFormatChange = (format: DeckFormat) => {
+    setDeck({ ...getValidator({ ...deck, format }).validate() });
+  };
 
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
@@ -41,7 +47,10 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
               Deck builder
             </Heading>
 
-            <CardGallery onCardSearch={setCardPool} />
+            <CardGallery
+              onCardSearch={setCardPool}
+              onFormatChange={onFormatChange}
+            />
           </div>
 
           {/* Deck Overview */}

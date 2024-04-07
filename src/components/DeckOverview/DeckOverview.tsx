@@ -14,18 +14,20 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({ deck }) => {
         {/* Leader */}
         <P className="text-center">Leader</P>
         <ul>{deck.leader && <CardListItem card={deck.leader} />}</ul>
-        <P className="text-center">Deck List</P>
+
         {/* Deck */}
+        <P className="text-center">Deck List</P>
         <ul>
           {deck.deckList.map((card) => (
-            <CardListItem card={card} />
+            <CardListItem key={`desck-list-item-${card.cardId}`} card={card} />
           ))}
         </ul>
-        <P className="text-center">Evolve List</P>
+
         {/* Evolve deck */}
+        <P className="text-center">Evolve List</P>
         <ul>
           {deck.evolveList.map((card) => (
-            <CardListItem card={card} />
+            <CardListItem key={`evolve-list-item-${card.cardId}`} card={card} />
           ))}
         </ul>
       </Droppable>

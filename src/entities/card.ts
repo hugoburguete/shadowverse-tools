@@ -1,15 +1,18 @@
 import { CardSearchResultFragment } from '../gql/generated/graphql';
 
 export type CardSimplified = CardSearchResultFragment;
+export type DeckFormat = 'standard' | 'gloryfinder';
 
-export type CardWithQuantity = CardSimplified & {
+export type DeckCard = CardSimplified & {
   quantity: number;
+  valid: boolean;
 };
 
 export type Deck = {
-  leader: CardWithQuantity | null;
-  deckList: CardWithQuantity[];
-  evolveList: CardWithQuantity[];
+  format: DeckFormat;
+  leader: DeckCard | null;
+  deckList: DeckCard[];
+  evolveList: DeckCard[];
 };
 
 export enum CardDragSource {

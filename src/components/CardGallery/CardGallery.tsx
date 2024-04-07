@@ -1,8 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
-import { CardDragSource, CardSimplified } from '../../entities/card';
+import {
+  CardDragSource,
+  CardSimplified,
+  DeckFormat,
+} from '../../entities/card';
 import { QueryCardsArgs } from '../../gql/generated/graphql';
 import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
+import { createDeckCard } from '../../lib/helpers/card';
 import CardList from '../CardList';
 import CardSearchForm from '../CardSearchForm';
 import Droppable from '../dnd/Droppable';
@@ -10,9 +15,10 @@ import P from '../typography/Paragraph';
 
 export type CardGalleryProps = {
   onCardSearch: (cards: CardSimplified[]) => void;
+  onFormatChange: (format: DeckFormat) => void;
 };
 
-const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
+const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
   const [variables, setVariables] = useState<QueryCardsArgs>({
     searchTerm: '',
     cost: [],
@@ -31,14 +37,12 @@ const CardGallery = ({ onCardSearch }: CardGalleryProps) => {
     onCardSearch(data?.cards ?? []);
   }, [data, onCardSearch]);
 
-  const cardsForDisplay = data
-    ? data.cards.map((c) => ({ ...c, quantity: 1 }))
-    : [];
+  const cardsForDisplay = data ? data.cards.map((c) => createDeckCard(c)) : [];
 
   return (
     <div className="w-full flex flex-col">
       <div className="flex">
-        <CardSearchForm onSubmit={onSubmit} />
+        <CardSearchForm onSubmit={onSubmit} onFormatChange={onFormatChange} />
       </div>
       <Droppable id={CardDragSource.CARD_LIBRARY}>
         {/* TODO: Loading bar */}

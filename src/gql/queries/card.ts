@@ -4,7 +4,10 @@ export const FRAGMENT_SEARCH_CARDS = gql(`
   fragment CardSearchResult on Card {
     attack
     cardId
-    class
+    class {
+      id
+      name
+    }
     cost
     health
     image

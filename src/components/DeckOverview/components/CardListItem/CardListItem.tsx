@@ -1,9 +1,9 @@
-import { CardDragSource, CardWithQuantity } from '../../../../entities/card';
+import { CardDragSource, DeckCard } from '../../../../entities/card';
 import Draggable from '../../../dnd/Draggable';
 import P from '../../../typography/Paragraph';
 
 export type CardListItemProps = {
-  card: CardWithQuantity;
+  card: DeckCard;
 };
 
 const CardListItem: React.FC<CardListItemProps> = ({ card }) => {
@@ -26,7 +26,7 @@ const CardListItem: React.FC<CardListItemProps> = ({ card }) => {
         <P
           className="overflow-hidden block text-ellipsis whitespace-nowrap"
           style={{ width: 'calc(80%)' }}
-        >{`${card.quantity}x ${card.name}`}</P>
+        >{`${card.quantity}x ${card.name} ${card.valid ? 'valid' : 'invalid'}`}</P>
       </Draggable>
     </li>
   );

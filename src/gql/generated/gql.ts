@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n": types.CardSearchResultFragmentDoc,
+    "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class {\n      id\n      name\n    }\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n": types.CardSearchResultFragmentDoc,
     "\n  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int, $rarities: [Int!]) {\n    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, rarities: $rarities, types: $types, skip: $skip, take: $take) {\n      ...CardSearchResult\n    }\n  }\n": types.SearchCardsDocument,
     "\n  query GetQueryData($take: Int) {\n    expansions(take: $take) {\n      id\n      name\n    }\n    rarities(take: $take) {\n      id\n      name\n    }\n  }\n": types.GetQueryDataDocument,
 };
@@ -35,7 +35,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n"): (typeof documents)["\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n"];
+export function gql(source: "\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class {\n      id\n      name\n    }\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n"): (typeof documents)["\n  fragment CardSearchResult on Card {\n    attack\n    cardId\n    class {\n      id\n      name\n    }\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

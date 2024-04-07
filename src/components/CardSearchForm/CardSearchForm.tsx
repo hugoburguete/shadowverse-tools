@@ -1,23 +1,32 @@
 import { useQuery } from '@apollo/client';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { DeckFormat } from '../../entities/card';
 import { QueryCardsArgs } from '../../gql/generated/graphql';
 import { QUERY_GET_FILTER_DATA } from '../../gql/queries/expansion';
 import { toggleArrayItem } from '../../lib/array';
+import { capitalizeFirstLetter } from '../../lib/string';
 import SearchInput from '../SearchInput';
 import Checkbox from '../forms/Checkbox';
 import FormGroup from '../forms/FormGroup';
 import Label from '../forms/Label';
+import RadioButton from '../forms/RadioButton';
 
 export type CardSearchFormProps = {
   onSubmit: (searchArgs: QueryCardsArgs) => void;
+  onFormatChange: (format: DeckFormat) => void;
 };
 
-const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
+const CardSearchForm: React.FC<CardSearchFormProps> = ({
+  onSubmit,
+  onFormatChange,
+}) => {
+  const [selectedFormat, setSelectedFormat] = useState<DeckFormat>('standard');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCosts, setSelectedCosts] = useState<number[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedExpansions, setSelectedExpansions] = useState<number[]>([]);
   const [selectedRarities, setSelectedRarities] = useState<number[]>([]);
+  const formats = ['standard', 'gloryfinder'];
   const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
   const { loading, data } = useQuery(QUERY_GET_FILTER_DATA, {
     variables: { take: 12 },
@@ -85,11 +94,34 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({ onSubmit }) => {
     );
   };
 
+  const onFormatSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    const newFormat = e.target.value as DeckFormat;
+    setSelectedFormat(newFormat);
+    onFormatChange(newFormat);
+  };
+
   return (
     <form onSubmit={onFormSubmit}>
       <FormGroup>
-        <Label htmlFor="card-search-form">Search: </Label>
-        <SearchInput id={'card-search-form'} onSearch={onSearch} />
+        <Label htmlFor="filter-format" faux>
+          Format:{' '}
+        </Label>
+        {formats.map((format) => (
+          <RadioButton
+            id={`filter-format-${format}`}
+            key={`filter-format-${format}`}
+            name="format"
+            value={format}
+            checked={selectedFormat.includes(format)}
+            onChange={onFormatSelected}
+          >
+            {capitalizeFirstLetter(format)}
+          </RadioButton>
+        ))}
+      </FormGroup>
+      <FormGroup>
+        <Label htmlFor="filter-search">Search: </Label>
+        <SearchInput id={'filter-search'} onSearch={onSearch} />
       </FormGroup>
       <FormGroup>
         <Label htmlFor="card-search-form">Cost: </Label>

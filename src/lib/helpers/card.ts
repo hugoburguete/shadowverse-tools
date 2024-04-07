@@ -1,24 +1,32 @@
-import { CardSimplified, CardWithQuantity, Deck } from '../../entities/card';
+import { CardSimplified, Deck, DeckCard } from '../../entities/card';
+import { getValidator } from '../validators';
 
 export const LEADER_CARD_TYPES = ['Leader'];
 export const EVOLVE_CARD_TYPES = ['Follower / Evolve'];
 
 /**
+ * Creates a deck card with default values.
+ * @param card
+ */
+export const createDeckCard = (card: CardSimplified) => {
+  return {
+    ...card,
+    quantity: 1,
+    valid: true,
+  };
+};
+
+/**
  * Adds a card to a deck.
  *
  * @param card The card to add
- * @param deck The current deck @param restrictions Restrictions in the format.
+ * @param deck The current deck. @param restrictions Restrictions in the format.
  * @returns A modified version of the deck passed.
  */
-export const addCardToDeck = (
-  card: CardSimplified,
-  deck: Deck,
-  restrictions: []
-): Deck => {
-  // TODO: restrictions
+export const addCardToDeck = (card: CardSimplified, deck: Deck): Deck => {
   if (LEADER_CARD_TYPES.includes(card.type)) {
     // Add leader
-    deck.leader = { ...card, quantity: 1 };
+    deck.leader = createDeckCard(card);
   } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
     // Add evolve card
     deck.evolveList = addCardToCardList(card, deck.evolveList);
@@ -26,7 +34,7 @@ export const addCardToDeck = (
     // Add regular card
     deck.deckList = addCardToCardList(card, deck.deckList);
   }
-  return deck;
+  return getValidator(deck).validate();
 };
 
 /**
@@ -35,8 +43,8 @@ export const addCardToDeck = (
  */
 const addCardToCardList = (
   card: CardSimplified,
-  cardList: CardWithQuantity[]
-): CardWithQuantity[] => {
+  cardList: DeckCard[]
+): DeckCard[] => {
   const index = cardList.findIndex((c) => c.cardId === card.cardId);
 
   if (index >= 0) {
@@ -44,10 +52,7 @@ const addCardToCardList = (
     cardList[index].quantity += 1;
   } else {
     // Add new card
-    cardList.push({
-      ...card,
-      quantity: 1,
-    });
+    cardList.push(createDeckCard(card));
   }
 
   return cardList;
@@ -83,7 +88,7 @@ export const removeCardFromDeck = (cardId: string, deck: Deck): Deck => {
     }
   }
 
-  return deck;
+  return getValidator(deck).validate();
 };
 
 /**
@@ -92,8 +97,8 @@ export const removeCardFromDeck = (cardId: string, deck: Deck): Deck => {
  */
 const removeCardFromCardList = (
   card: CardSimplified,
-  cardList: CardWithQuantity[]
-): CardWithQuantity[] => {
+  cardList: DeckCard[]
+): DeckCard[] => {
   const index = cardList.findIndex((c) => c.cardId === card.cardId);
 
   if (index >= 0) {
