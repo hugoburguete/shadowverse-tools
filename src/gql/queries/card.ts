@@ -21,8 +21,26 @@ export const FRAGMENT_SEARCH_CARDS = gql(`
 `);
 
 export const QUERY_SEARCH_CARDS = gql(`
-  query SearchCards($searchTerm: String, $cost: [Int!], $expansions: [Int!], $types: [String!], $skip: Int, $take: Int, $rarities: [Int!]) {
-    cards(searchTerm: $searchTerm, cost: $cost, expansions: $expansions, rarities: $rarities, types: $types, skip: $skip, take: $take) {
+  query SearchCards(
+    $searchTerm: String,
+    $cost: [Int!],
+    $expansions: [Int!],
+    $classes: [Int!],
+    $types: [String!],
+    $skip: Int,
+    $take: Int,
+    $rarities: [Int!]
+  ) {
+    cards(
+      searchTerm: $searchTerm,
+      cost: $cost,
+      expansions: $expansions,
+      classes: $classes,
+      rarities: $rarities,
+      types: $types,
+      skip: $skip,
+      take: $take
+    ) {
       ...CardSearchResult
     }
   }

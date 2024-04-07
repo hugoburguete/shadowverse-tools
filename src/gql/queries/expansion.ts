@@ -10,5 +10,9 @@ export const QUERY_GET_FILTER_DATA = gql(`
       id
       name
     }
+    classes {
+      id
+      name
+    }
   }
 `);

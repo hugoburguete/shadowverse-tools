@@ -22,6 +22,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
 }) => {
   const [selectedFormat, setSelectedFormat] = useState<DeckFormat>('standard');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedClassIds, setSelectedClassIds] = useState<number[]>([]);
   const [selectedCosts, setSelectedCosts] = useState<number[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedExpansions, setSelectedExpansions] = useState<number[]>([]);
@@ -33,6 +34,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
   });
   const expansions = data?.expansions ?? [];
   const rarities = data?.rarities ?? [];
+  const classes = data?.classes ?? [];
 
   const doSearch = () => {
     onSubmit({
@@ -40,6 +42,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
       cost: selectedCosts,
       types: selectedTypes,
       expansions: selectedExpansions,
+      classes: selectedClassIds,
       rarities: selectedRarities,
       skip: 0,
       take: 12,
@@ -52,6 +55,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
       cost: selectedCosts,
       types: selectedTypes,
       expansions: selectedExpansions,
+      classes: selectedClassIds,
       rarities: selectedRarities,
       skip: 0,
       take: 12,
@@ -62,6 +66,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
     selectedTypes,
     selectedExpansions,
     selectedRarities,
+    selectedClassIds,
     onSubmit,
   ]);
 
@@ -94,6 +99,12 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
     );
   };
 
+  const onClassSelected = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSelectedClassIds(
+      toggleArrayItem(parseInt(e.target.value), selectedClassIds)
+    );
+  };
+
   const onFormatSelected = (e: ChangeEvent<HTMLInputElement>): void => {
     const newFormat = e.target.value as DeckFormat;
     setSelectedFormat(newFormat);
@@ -123,6 +134,23 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
         <Label htmlFor="filter-search">Search: </Label>
         <SearchInput id={'filter-search'} onSearch={onSearch} />
       </FormGroup>
+
+      <FormGroup>
+        <Label htmlFor="card-search-form">Class: </Label>
+        {classes.map((clax) => (
+          <Checkbox
+            id={`filter-class-${clax.id}`}
+            key={`filter-class-${clax.id}`}
+            name="cost"
+            value={clax.id}
+            checked={selectedClassIds.includes(clax.id)}
+            onChange={onClassSelected}
+          >
+            {clax.name}
+          </Checkbox>
+        ))}
+      </FormGroup>
+
       <FormGroup>
         <Label htmlFor="card-search-form">Cost: </Label>
         {[1, 2, 3, 4, 5, 6, 7, 8].map((costNum) => (
