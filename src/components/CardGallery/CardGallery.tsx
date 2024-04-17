@@ -3,9 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   CardDragSource,
   CardSimplified,
+  DeckCard,
   DeckFormat,
 } from '../../entities/card';
-import { QueryCardsArgs } from '../../gql/generated/graphql';
+import { QueryCardsArgs, SearchCardsQuery } from '../../gql/generated/graphql';
 import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
 import { createDeckCard } from '../../lib/helpers/card';
 import CardList from '../CardList';
@@ -23,9 +24,12 @@ const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
     searchTerm: '',
     cost: [],
     types: [],
-    take: 12,
   });
-  const { loading, error, data } = useQuery(QUERY_SEARCH_CARDS, { variables });
+  const { loading, error, data, fetchMore } = useQuery(QUERY_SEARCH_CARDS, {
+    variables,
+  });
+  const [refetching, setRefetching] = useState(false);
+  const [cardsForDisplay, setCardsForDisplay] = useState<DeckCard[]>([]);
   const onSubmit = useCallback(
     (searchArgs: QueryCardsArgs) => {
       setVariables(searchArgs);
@@ -33,11 +37,51 @@ const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
     [setVariables]
   );
 
+  const getCardsFromData = (
+    data: SearchCardsQuery | undefined
+  ): CardSimplified[] => {
+    if (!data || !data.cards.edges) {
+      return [];
+    }
+
+    return data.cards.edges.map((edge) => edge.node);
+  };
+
   useEffect(() => {
-    onCardSearch(data?.cards ?? []);
+    onCardSearch(getCardsFromData(data));
   }, [data, onCardSearch]);
 
-  const cardsForDisplay = data ? data.cards.map((c) => createDeckCard(c)) : [];
+  // Apply infinite load
+  useEffect(() => {
+    const loadMore = () => {
+      const amountScrolled =
+        window.innerHeight + document.documentElement.scrollTop;
+      const scrollThreshold =
+        (document.scrollingElement?.scrollHeight || 0) - 100;
+      const canFetchMore = !refetching && data?.cards.pageInfo?.hasNextPage;
+
+      if (amountScrolled >= scrollThreshold && canFetchMore) {
+        // Set a flag to indicate we're fetching more
+        setRefetching(true);
+
+        // Fetch more
+        fetchMore({
+          variables: {
+            after: data?.cards.pageInfo?.endCursor,
+          },
+        }).then(() => setRefetching(false));
+      }
+    };
+
+    window.addEventListener('scroll', loadMore);
+    return () => window.removeEventListener('scroll', loadMore);
+  }, [fetchMore, refetching, setRefetching, data]);
+
+  useEffect(() => {
+    setCardsForDisplay(
+      getCardsFromData(data).map((card) => createDeckCard(card))
+    );
+  }, [data, setCardsForDisplay]);
 
   return (
     <div className="w-full flex flex-col">
@@ -52,7 +96,7 @@ const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
         {error && <P>Error : {error.message}</P>}
 
         <CardList
-          cards={cardsForDisplay}
+          cards={cardsForDisplay || []}
           source={CardDragSource.CARD_LIBRARY}
         />
       </Droppable>

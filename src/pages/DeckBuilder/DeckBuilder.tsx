@@ -39,7 +39,6 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   return (
     <div className="min-h-full">
       <div className="flex items-start">
-        {/* TODO: Add a pointer sensor so we can simply click the cards to add them in (https://github.com/clauderic/dnd-kit/issues/591#issuecomment-1017050816) */}
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
           <div className="w-full">

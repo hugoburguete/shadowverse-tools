@@ -1,18 +1,34 @@
 import { gql } from '../generated';
 
 export const QUERY_GET_FILTER_DATA = gql(`
-  query GetQueryData($take: Int) {
-    expansions(take: $take) {
-      id
-      name
+  query GetQueryData {
+    expansions {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
-    rarities(take: $take) {
+    rarities {
       id
       name
     }
     classes {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `);

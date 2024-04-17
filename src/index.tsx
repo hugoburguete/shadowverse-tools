@@ -11,6 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { FRAGMENT_SEARCH_CARDS } from './gql/queries/card';
+import { searchCardsQueryTypePolicy } from './gql/type-policies/search-cards.query';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -20,6 +21,13 @@ const link = from([removeTypenameLink, httpLink]);
 const apolloClient = new ApolloClient({
   cache: new InMemoryCache({
     fragments: createFragmentRegistry(FRAGMENT_SEARCH_CARDS),
+    typePolicies: {
+      Query: {
+        fields: {
+          ...searchCardsQueryTypePolicy(),
+        },
+      },
+    },
   }),
   link,
 });

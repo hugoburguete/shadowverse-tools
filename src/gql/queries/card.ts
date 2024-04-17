@@ -27,9 +27,8 @@ export const QUERY_SEARCH_CARDS = gql(`
     $expansions: [Int!],
     $classes: [Int!],
     $types: [String!],
-    $skip: Int,
-    $take: Int,
-    $rarities: [Int!]
+    $rarities: [Int!],
+    $after: String,
   ) {
     cards(
       searchTerm: $searchTerm,
@@ -38,10 +37,20 @@ export const QUERY_SEARCH_CARDS = gql(`
       classes: $classes,
       rarities: $rarities,
       types: $types,
-      skip: $skip,
-      take: $take
+      after: $after,
     ) {
-      ...CardSearchResult
+      edges {
+        cursor
+        node {
+          ...CardSearchResult
+        }
+      }
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+      }
     }
   }
 `);

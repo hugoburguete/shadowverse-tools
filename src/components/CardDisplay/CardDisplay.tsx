@@ -7,7 +7,12 @@ export type CardProps = {
 export const CardDisplay = ({ card: { image, name } }: CardProps) => {
   return (
     <div className="h-0 pb-[140%] relative w-full">
-      <img className="w-full h-full block absolute" src={image} alt={name} />
+      <img
+        loading="lazy"
+        className="w-full h-full block absolute"
+        src={image}
+        alt={name}
+      />
     </div>
   );
 };

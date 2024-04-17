@@ -36,16 +36,40 @@ export type Card = {
   type: Scalars['String']['output'];
 };
 
+export type CardEdge = {
+  __typename?: 'CardEdge';
+  cursor: Scalars['String']['output'];
+  node: Card;
+};
+
+export type CardPageInfo = {
+  __typename?: 'CardPageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
 export type Class = {
   __typename?: 'Class';
-  /** The cards within this class. */
-  cards: Array<Card>;
   /** The class identifier. */
   id: Scalars['Int']['output'];
   /** The class name. */
   name: Scalars['String']['output'];
   /** The class slug. */
   slug: Scalars['String']['output'];
+};
+
+export type ClassEdge = {
+  __typename?: 'ClassEdge';
+  cursor: Scalars['String']['output'];
+  node: Class;
+};
+
+export type ClassPageInfo = {
+  __typename?: 'ClassPageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  startCursor?: Maybe<Scalars['String']['output']>;
 };
 
 export type Expansion = {
@@ -62,31 +86,72 @@ export type Expansion = {
   slug: Scalars['String']['output'];
 };
 
+export type ExpansionEdge = {
+  __typename?: 'ExpansionEdge';
+  cursor: Scalars['String']['output'];
+  node: Expansion;
+};
+
+export type ExpansionPageInfo = {
+  __typename?: 'ExpansionPageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** Result for filtered cards. */
+export type PaginatedCards = {
+  __typename?: 'PaginatedCards';
+  edges?: Maybe<Array<CardEdge>>;
+  pageInfo?: Maybe<CardPageInfo>;
+  totalCount: Scalars['Int']['output'];
+};
+
+/** Result for filtered classes. */
+export type PaginatedClasses = {
+  __typename?: 'PaginatedClasses';
+  edges?: Maybe<Array<ClassEdge>>;
+  pageInfo?: Maybe<ClassPageInfo>;
+  totalCount: Scalars['Int']['output'];
+};
+
+/** Result for filtered expansions. */
+export type PaginatedExpansions = {
+  __typename?: 'PaginatedExpansions';
+  edges?: Maybe<Array<ExpansionEdge>>;
+  pageInfo?: Maybe<ExpansionPageInfo>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  cards: Array<Card>;
+  cards: PaginatedCards;
   class: Class;
-  classes: Array<Class>;
+  classes: PaginatedClasses;
   expansion: Expansion;
-  expansions: Array<Expansion>;
+  expansions: PaginatedExpansions;
   rarities: Array<Rarity>;
 };
 
 
 export type QueryCardsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
   classes?: Array<Scalars['Int']['input']>;
   cost?: Array<Scalars['Int']['input']>;
   expansions?: Array<Scalars['Int']['input']>;
   rarities?: Array<Scalars['Int']['input']>;
   searchTerm?: Scalars['String']['input'];
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
   types?: Array<Scalars['String']['input']>;
 };
 
 
 export type QueryClassArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryClassesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -97,15 +162,7 @@ export type QueryExpansionArgs = {
 
 export type QueryExpansionsArgs = {
   ids?: Array<Scalars['Int']['input']>;
-  skip?: Scalars['Int']['input'];
   slugs?: Array<Scalars['String']['input']>;
-  take?: Scalars['Int']['input'];
-};
-
-
-export type QueryRaritiesArgs = {
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
 };
 
 export type Rarity = {
@@ -126,21 +183,18 @@ export type SearchCardsQueryVariables = Exact<{
   expansions?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
   classes?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
   types?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  take?: InputMaybe<Scalars['Int']['input']>;
   rarities?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type SearchCardsQuery = { __typename?: 'Query', cards: Array<{ __typename?: 'Card', attack?: number | null, cardId: string, cost?: number | null, health?: number | null, image: string, name: string, trait?: string | null, type: string, class: { __typename?: 'Class', id: number, name: string }, rarity: { __typename?: 'Rarity', acronym: string } }> };
+export type SearchCardsQuery = { __typename?: 'Query', cards: { __typename?: 'PaginatedCards', totalCount: number, edges?: Array<{ __typename?: 'CardEdge', cursor: string, node: { __typename?: 'Card', attack?: number | null, cardId: string, cost?: number | null, health?: number | null, image: string, name: string, trait?: string | null, type: string, class: { __typename?: 'Class', id: number, name: string }, rarity: { __typename?: 'Rarity', acronym: string } } }> | null, pageInfo?: { __typename?: 'CardPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean } | null } };
 
-export type GetQueryDataQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']['input']>;
-}>;
+export type GetQueryDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetQueryDataQuery = { __typename?: 'Query', expansions: Array<{ __typename?: 'Expansion', id: number, name: string }>, rarities: Array<{ __typename?: 'Rarity', id: number, name: string }>, classes: Array<{ __typename?: 'Class', id: number, name: string }> };
+export type GetQueryDataQuery = { __typename?: 'Query', expansions: { __typename?: 'PaginatedExpansions', edges?: Array<{ __typename?: 'ExpansionEdge', node: { __typename?: 'Expansion', id: number, name: string } }> | null, pageInfo?: { __typename?: 'ExpansionPageInfo', hasNextPage: boolean, endCursor?: string | null } | null }, rarities: Array<{ __typename?: 'Rarity', id: number, name: string }>, classes: { __typename?: 'PaginatedClasses', edges?: Array<{ __typename?: 'ClassEdge', node: { __typename?: 'Class', id: number, name: string } }> | null, pageInfo?: { __typename?: 'ClassPageInfo', hasNextPage: boolean, endCursor?: string | null } | null } };
 
 export const CardSearchResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CardSearchResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Card"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attack"}},{"kind":"Field","name":{"kind":"Name","value":"cardId"}},{"kind":"Field","name":{"kind":"Name","value":"class"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"}},{"kind":"Field","name":{"kind":"Name","value":"health"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acronym"}}]}},{"kind":"Field","name":{"kind":"Name","value":"trait"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]} as unknown as DocumentNode<CardSearchResultFragment, unknown>;
-export const SearchCardsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchCards"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cost"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"expansions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"classes"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"types"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rarities"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"searchTerm"},"value":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}}},{"kind":"Argument","name":{"kind":"Name","value":"cost"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cost"}}},{"kind":"Argument","name":{"kind":"Name","value":"expansions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"expansions"}}},{"kind":"Argument","name":{"kind":"Name","value":"classes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"classes"}}},{"kind":"Argument","name":{"kind":"Name","value":"rarities"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rarities"}}},{"kind":"Argument","name":{"kind":"Name","value":"types"},"value":{"kind":"Variable","name":{"kind":"Name","value":"types"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CardSearchResult"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CardSearchResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Card"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attack"}},{"kind":"Field","name":{"kind":"Name","value":"cardId"}},{"kind":"Field","name":{"kind":"Name","value":"class"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"}},{"kind":"Field","name":{"kind":"Name","value":"health"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acronym"}}]}},{"kind":"Field","name":{"kind":"Name","value":"trait"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]} as unknown as DocumentNode<SearchCardsQuery, SearchCardsQueryVariables>;
-export const GetQueryDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQueryData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"expansions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"rarities"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"classes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetQueryDataQuery, GetQueryDataQueryVariables>;
+export const SearchCardsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchCards"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cost"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"expansions"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"classes"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"types"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rarities"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"searchTerm"},"value":{"kind":"Variable","name":{"kind":"Name","value":"searchTerm"}}},{"kind":"Argument","name":{"kind":"Name","value":"cost"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cost"}}},{"kind":"Argument","name":{"kind":"Name","value":"expansions"},"value":{"kind":"Variable","name":{"kind":"Name","value":"expansions"}}},{"kind":"Argument","name":{"kind":"Name","value":"classes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"classes"}}},{"kind":"Argument","name":{"kind":"Name","value":"rarities"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rarities"}}},{"kind":"Argument","name":{"kind":"Name","value":"types"},"value":{"kind":"Variable","name":{"kind":"Name","value":"types"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CardSearchResult"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"startCursor"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CardSearchResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Card"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attack"}},{"kind":"Field","name":{"kind":"Name","value":"cardId"}},{"kind":"Field","name":{"kind":"Name","value":"class"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cost"}},{"kind":"Field","name":{"kind":"Name","value":"health"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acronym"}}]}},{"kind":"Field","name":{"kind":"Name","value":"trait"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]} as unknown as DocumentNode<SearchCardsQuery, SearchCardsQueryVariables>;
+export const GetQueryDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQueryData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"expansions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rarities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"classes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetQueryDataQuery, GetQueryDataQueryVariables>;

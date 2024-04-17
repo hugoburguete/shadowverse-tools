@@ -29,12 +29,10 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
   const [selectedRarities, setSelectedRarities] = useState<number[]>([]);
   const formats = ['standard', 'gloryfinder'];
   const cardTypes = ['Follower', 'Follower / Evolve', 'Spell', 'Leader'];
-  const { loading, data } = useQuery(QUERY_GET_FILTER_DATA, {
-    variables: { take: 12 },
-  });
-  const expansions = data?.expansions ?? [];
+  const { loading, data } = useQuery(QUERY_GET_FILTER_DATA);
+  const expansions = data?.expansions.edges?.map((edge) => edge.node) ?? [];
   const rarities = data?.rarities ?? [];
-  const classes = data?.classes ?? [];
+  const classes = data?.classes.edges?.map((edge) => edge.node) ?? [];
 
   const doSearch = () => {
     onSubmit({
@@ -44,8 +42,6 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
       expansions: selectedExpansions,
       classes: selectedClassIds,
       rarities: selectedRarities,
-      skip: 0,
-      take: 12,
     });
   };
 
@@ -57,8 +53,6 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
       expansions: selectedExpansions,
       classes: selectedClassIds,
       rarities: selectedRarities,
-      skip: 0,
-      take: 12,
     });
   }, [
     searchTerm,
