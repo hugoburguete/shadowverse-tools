@@ -1,14 +1,6 @@
-import { FieldPolicy, FieldReadFunction } from '@apollo/client';
 import { relayStylePagination } from '@apollo/client/utilities';
-import { PaginatedCards } from '../generated/graphql';
 
-type TypePolicyField = {
-  [fieldName: string]:
-    | FieldPolicy<PaginatedCards, PaginatedCards>
-    | FieldReadFunction<PaginatedCards>;
-};
-
-export const searchCardsQueryTypePolicy = () => {
+export const searchCardsQueryField = () => {
   return {
     cards: relayStylePagination([
       'classes',
@@ -18,13 +10,5 @@ export const searchCardsQueryTypePolicy = () => {
       'searchTerm',
       'types',
     ]),
-    // { keyArgs: false,
-
-    //   merge(existing, incoming, { readField }) { const merged = existing &&
-    //     existing.edges ? existing.edges.slice(0) : [];
-
-    //     return merged;
-    //   },
-    // },
   };
 };

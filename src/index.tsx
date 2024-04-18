@@ -11,7 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { FRAGMENT_SEARCH_CARDS } from './gql/queries/card';
-import { searchCardsQueryTypePolicy } from './gql/type-policies/search-cards.query';
+import { searchCardsQueryField } from './gql/type-policies/search-cards.query';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -24,7 +24,7 @@ const apolloClient = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          ...searchCardsQueryTypePolicy(),
+          ...searchCardsQueryField(),
         },
       },
     },
