@@ -19,6 +19,11 @@ const httpLink = new HttpLink({ uri: process.env.REACT_APP_API_ENDPOINT });
 const removeTypenameLink = removeTypenameFromVariables();
 const link = from([removeTypenameLink, httpLink]);
 const apolloClient = new ApolloClient({
+  defaultOptions: {
+    mutate: {
+      errorPolicy: 'all',
+    },
+  },
   cache: new InMemoryCache({
     fragments: createFragmentRegistry(FRAGMENT_SEARCH_CARDS),
     typePolicies: {

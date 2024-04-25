@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from '../../Icon';
 import { Link } from 'react-router-dom';
+import Icon from '../../Icon';
 import { Icons } from '../../Icon/Icon';
 
 export type HeaderProps = {};
@@ -39,6 +39,18 @@ const Header: React.FC<HeaderProps> = () => {
               className="mr-11 pr-2 cursor-pointer text-gray-300 hover:text-white font-semibold tr04"
             >
               Home
+            </Link>
+            <Link
+              to="/login"
+              className="mr-11 pr-2 cursor-pointer text-gray-300 hover:text-white font-semibold tr04"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="mr-11 pr-2 cursor-pointer text-gray-300 hover:text-white font-semibold tr04"
+            >
+              Register
             </Link>
             <Link
               to="/deck-builder"
