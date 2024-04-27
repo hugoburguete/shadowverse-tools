@@ -8,3 +8,12 @@ mutation RegisterUser($registerInput: RegisterInput!) {
   }
 }
 `);
+
+export const MUTATION_LOGIN_USER = gql(`
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    accessToken
+    refreshToken
+  }
+}
+`);

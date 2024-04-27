@@ -9,6 +9,7 @@ import React, {
 type AuthContextType = {
   authenticated: boolean;
   authenticate: (accessToken: string, refreshToken: string) => void;
+  logout: () => void;
   accessToken: string | null;
   refreshToken: string | null;
 };
@@ -16,6 +17,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   authenticated: false,
   authenticate: () => {},
+  logout: () => {},
   accessToken: null,
   refreshToken: null,
 });
@@ -36,6 +38,15 @@ export const AuthContextProvider = ({
     setAuthenticated(true);
   };
 
+  const logout = () => {
+    Cookies.remove('access-token');
+    Cookies.remove('refresh-token');
+    setAccessToken(null);
+    setRefreshToken(null);
+
+    setAuthenticated(false);
+  };
+
   useEffect(() => {
     const at = Cookies.get('access-token');
     const rt = Cookies.get('refresh-token');
@@ -49,7 +60,7 @@ export const AuthContextProvider = ({
 
   return (
     <AuthContext.Provider
-      value={{ authenticated, authenticate, refreshToken, accessToken }}
+      value={{ authenticated, authenticate, refreshToken, accessToken, logout }}
     >
       {children}
     </AuthContext.Provider>

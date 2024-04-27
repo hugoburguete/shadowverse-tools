@@ -18,6 +18,7 @@ const documents = {
     "\nmutation CreateDeck($createDeckInput: CreateDeckInput!) {\n  createDeck(createDeckInput: $createDeckInput) {\n    id\n  }\n}\n": types.CreateDeckDocument,
     "\n  query GetQueryData {\n    expansions {\n      edges {\n        node {\n          id\n          name\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n    rarities {\n      id\n      name\n    }\n    classes {\n      edges {\n        node {\n          id\n          name\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetQueryDataDocument,
     "\nmutation RegisterUser($registerInput: RegisterInput!) {\n  register(registerInput: $registerInput) {\n    accessToken\n    refreshToken\n  }\n}\n": types.RegisterUserDocument,
+    "\nmutation Login($loginInput: LoginInput!) {\n  login(loginInput: $loginInput) {\n    accessToken\n    refreshToken\n  }\n}\n": types.LoginDocument,
 };
 
 /**
@@ -54,6 +55,10 @@ export function gql(source: "\n  query GetQueryData {\n    expansions {\n      e
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\nmutation RegisterUser($registerInput: RegisterInput!) {\n  register(registerInput: $registerInput) {\n    accessToken\n    refreshToken\n  }\n}\n"): (typeof documents)["\nmutation RegisterUser($registerInput: RegisterInput!) {\n  register(registerInput: $registerInput) {\n    accessToken\n    refreshToken\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nmutation Login($loginInput: LoginInput!) {\n  login(loginInput: $loginInput) {\n    accessToken\n    refreshToken\n  }\n}\n"): (typeof documents)["\nmutation Login($loginInput: LoginInput!) {\n  login(loginInput: $loginInput) {\n    accessToken\n    refreshToken\n  }\n}\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
