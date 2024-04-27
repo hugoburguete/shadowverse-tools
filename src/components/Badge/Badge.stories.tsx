@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { makeCard } from '../../../.storybook/factories/card';
+import { CardSimplified } from '../../entities/card';
 import CardDisplay from '../CardDisplay';
 import BadgeComponent from './Badge';
 
@@ -11,19 +13,7 @@ const meta = {
   decorators: (Story) => (
     <div className="relative w-52">
       <Story />
-      <CardDisplay
-        card={{
-          cardId: 'BP01-LD10',
-          image: 'https://images.shadowcard.io/images/cards/BP01-LD10.jpg',
-          name: 'Urias',
-          class: {
-            id: 1,
-            name: 'Abysscraft',
-          },
-          type: 'Leader',
-          rarity: { acronym: 'LG' },
-        }}
-      />
+      <CardDisplay card={makeCard() as CardSimplified} />
     </div>
   ),
 } satisfies Meta<typeof BadgeComponent>;
