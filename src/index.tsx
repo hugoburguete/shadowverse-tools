@@ -6,7 +6,9 @@ import {
   from,
 } from '@apollo/client';
 import { createFragmentRegistry } from '@apollo/client/cache';
+import { setContext } from '@apollo/client/link/context';
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
+import Cookies from 'js-cookie';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -17,7 +19,19 @@ import reportWebVitals from './reportWebVitals';
 
 const httpLink = new HttpLink({ uri: process.env.REACT_APP_API_ENDPOINT });
 const removeTypenameLink = removeTypenameFromVariables();
-const link = from([removeTypenameLink, httpLink]);
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = Cookies.get('access-token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+// const link = from([removeTypenameLink, httpLink, authLink]);
+const link = from([authLink, removeTypenameLink, httpLink]);
 const apolloClient = new ApolloClient({
   defaultOptions: {
     mutate: {

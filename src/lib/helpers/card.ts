@@ -1,4 +1,5 @@
 import { CardSimplified, Deck, DeckCard } from '../../entities/card';
+import { CreateDeckInput, DeckCardInput } from '../../gql/generated/graphql';
 import { getValidator } from '../validators';
 
 export const LEADER_CARD_TYPES = ['Leader'];
@@ -112,4 +113,26 @@ const removeCardFromCardList = (
   }
 
   return cardList;
+};
+
+export const transformDeckToCreateDeckPayload = (
+  deck: Deck
+): CreateDeckInput => {
+  const { format, name } = deck;
+  const cardMapper = (card: DeckCard) => {
+    return {
+      cardId: card.id,
+      quantity: card.quantity,
+    };
+  };
+  const deckCards: DeckCardInput[] = deck.deckList
+    .map(cardMapper)
+    .concat(deck.evolveList.map(cardMapper));
+  deckCards.push(cardMapper(deck.leader as DeckCard));
+
+  return {
+    format,
+    name: name as string,
+    deckCards,
+  };
 };

@@ -9,6 +9,7 @@ export type DeckCard = CardSimplified & {
 };
 
 export type Deck = {
+  name?: string;
   format: DeckFormat;
   leader: DeckCard | null;
   deckList: DeckCard[];
