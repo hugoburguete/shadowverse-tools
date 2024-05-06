@@ -16,6 +16,26 @@ mutation UpdateDeck($id: Int!, $input: CreateDeckInput!) {
 }
 `);
 
+export const QUERY_GET_USER_DECKS = gql(`
+query GetUserDecks {
+  decks {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+      startCursor
+    }
+    edges {
+    	cursor
+      node {
+        id
+        name  
+      }
+    }
+  }
+}
+`);
+
 export const QUERY_GET_DECK = gql(`
 query GetDeck(
   $id: Int!

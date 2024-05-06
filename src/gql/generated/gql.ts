@@ -17,6 +17,7 @@ const documents = {
     "\n  query SearchCards(\n    $searchTerm: String,\n    $cost: [Int!],\n    $expansions: [Int!],\n    $classes: [Int!],\n    $types: [String!],\n    $rarities: [Int!],\n    $after: String,\n  ) {\n    cards(\n      searchTerm: $searchTerm,\n      cost: $cost,\n      expansions: $expansions,\n      classes: $classes,\n      rarities: $rarities,\n      types: $types,\n      after: $after,\n    ) {\n      edges {\n        cursor\n        node {\n          ...CardSearchResult\n        }\n      }\n      totalCount\n      pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": types.SearchCardsDocument,
     "\nmutation CreateDeck($createDeckInput: CreateDeckInput!) {\n  createDeck(createDeckInput: $createDeckInput) {\n    id\n  }\n}\n": types.CreateDeckDocument,
     "\nmutation UpdateDeck($id: Int!, $input: CreateDeckInput!) {\n  updateDeck(id: $id, input: $input) {\n    status\n  }\n}\n": types.UpdateDeckDocument,
+    "\nquery GetUserDecks {\n  decks {\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n      startCursor\n    }\n    edges {\n    \tcursor\n      node {\n        id\n        name  \n      }\n    }\n  }\n}\n": types.GetUserDecksDocument,
     "\nquery GetDeck(\n  $id: Int!\n) {\n  deck(id: $id) {\n    cards {\n      ...CardSearchResult\n    }\n    cardsInfo {\n      cardId\n      quantity\n    }\n    name\n    format\n    id\n    name\n  }\n}\n": types.GetDeckDocument,
     "\n  query GetQueryData {\n    expansions {\n      edges {\n        node {\n          id\n          name\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n    rarities {\n      id\n      name\n    }\n    classes {\n      edges {\n        node {\n          id\n          name\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetQueryDataDocument,
     "\nmutation RegisterUser($registerInput: RegisterInput!) {\n  register(registerInput: $registerInput) {\n    accessToken\n    refreshToken\n  }\n}\n": types.RegisterUserDocument,
@@ -53,6 +54,10 @@ export function gql(source: "\nmutation CreateDeck($createDeckInput: CreateDeckI
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\nmutation UpdateDeck($id: Int!, $input: CreateDeckInput!) {\n  updateDeck(id: $id, input: $input) {\n    status\n  }\n}\n"): (typeof documents)["\nmutation UpdateDeck($id: Int!, $input: CreateDeckInput!) {\n  updateDeck(id: $id, input: $input) {\n    status\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery GetUserDecks {\n  decks {\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n      startCursor\n    }\n    edges {\n    \tcursor\n      node {\n        id\n        name  \n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery GetUserDecks {\n  decks {\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n      startCursor\n    }\n    edges {\n    \tcursor\n      node {\n        id\n        name  \n      }\n    }\n  }\n}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
