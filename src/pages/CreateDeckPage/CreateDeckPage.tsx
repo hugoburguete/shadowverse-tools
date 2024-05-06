@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import React, { useState } from 'react';
 import CardDisplay from '../../components/CardDisplay';
@@ -5,13 +6,18 @@ import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
 import Heading from '../../components/typography/Heading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
-import { addCardToDeck, removeCardFromDeck } from '../../lib/helpers/card';
+import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
+import {
+  addCardToDeck,
+  removeCardFromDeck,
+  transformDeckToCreateDeckPayload,
+} from '../../lib/helpers/card';
 import { getValidator } from '../../lib/validators';
 import useCardDragAndDrop from './useCardDragAndDrop';
 
-export type DeckBuilderProps = {};
+export type CreateDeckProps = {};
 
-const DeckBuilder: React.FC<DeckBuilderProps> = () => {
+const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   const [cardPool, setCardPool] = useState<CardSimplified[]>([]);
   const [deck, setDeck] = useState<Deck>({
     format: 'standard',
@@ -19,6 +25,17 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
     deckList: [],
     evolveList: [],
   });
+
+  const [createDeck] = useMutation(MUTATION_CREATE_DECK);
+  const saveDeck = (newDeck: Deck) => {
+    createDeck({
+      variables: {
+        createDeckInput: transformDeckToCreateDeckPayload(newDeck),
+      },
+    });
+
+    // TODO: Redirect to deck view
+  };
 
   const { handleDragEnd, handleDragStart, cardDraggedId } = useCardDragAndDrop(
     (cardId) => {
@@ -53,7 +70,7 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
           </div>
 
           {/* Deck Overview */}
-          <DeckOverview deck={deck} />
+          <DeckOverview deck={deck} onDeckSave={saveDeck} />
 
           <DragOverlay dropAnimation={null}>
             {cardDragged && <CardDisplay card={cardDragged} />}
@@ -64,4 +81,4 @@ const DeckBuilder: React.FC<DeckBuilderProps> = () => {
   );
 };
 
-export default DeckBuilder;
+export default CreateDeckPage;

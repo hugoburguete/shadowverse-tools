@@ -67,10 +67,22 @@ const Header: React.FC<HeaderProps> = () => {
               </button>
             )}
             <Link
-              to="/deck-builder"
+              to="/deck"
               className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
             >
-              Deck Builder
+              Create
+            </Link>
+            <Link
+              to="/deck/1/edit"
+              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+            >
+              Edit
+            </Link>
+            <Link
+              to="/deck/1"
+              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+            >
+              View
             </Link>
           </div>
           <a

@@ -1,8 +1,5 @@
-import { useMutation } from '@apollo/client';
 import { useContext, useEffect, useState } from 'react';
 import { CardDragSource, Deck } from '../../entities/card';
-import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
-import { transformDeckToCreateDeckPayload } from '../../lib/helpers/card';
 import { AuthContext } from '../../state/auth';
 import Droppable from '../dnd/Droppable';
 import Input from '../forms/Input';
@@ -11,21 +8,12 @@ import CardListItem from './components/CardListItem';
 
 export type DeckOverviewProps = {
   deck: Deck;
+  onDeckSave: (deck: Deck) => void;
 };
 
-const DeckOverview: React.FC<DeckOverviewProps> = ({ deck }) => {
+const DeckOverview: React.FC<DeckOverviewProps> = ({ deck, onDeckSave }) => {
   const { authenticated } = useContext(AuthContext);
-  const [name, setName] = useState('');
-
-  const [createDeck, { loading, data, error }] =
-    useMutation(MUTATION_CREATE_DECK);
-  const saveDeck = () => {
-    createDeck({
-      variables: {
-        createDeckInput: transformDeckToCreateDeckPayload(deck),
-      },
-    });
-  };
+  const [name, setName] = useState(deck.name || '');
 
   useEffect(() => {
     deck.name = name;
@@ -41,7 +29,9 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({ deck }) => {
         }}
       />
 
-      {authenticated && <button onClick={() => saveDeck()}>Save deck</button>}
+      {authenticated && (
+        <button onClick={() => onDeckSave(deck)}>Save deck</button>
+      )}
 
       {!authenticated && <a href="/login">Login to save your deck</a>}
       <Droppable id={CardDragSource.DECK}>
