@@ -10,6 +10,8 @@ import editDeckLoader from './pages/EditDeckPage/loader';
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
+import ViewDeckPage from './pages/ViewDeckPage/ViewDeckPage';
+import viewDeckLoader from './pages/ViewDeckPage/loader';
 import FourOhFourPage from './pages/errors/404Page';
 import GeneralErrorPage from './pages/errors/GeneralErrorPage';
 
@@ -22,7 +24,7 @@ let router = createBrowserRouter(
       <Route path="deck" element={<CreateDeckPage />} />
 
       <Route path="/deck/:deckId">
-        <Route path="" loader={editDeckLoader} element={<EditDeckPage />} />
+        <Route path="" loader={viewDeckLoader} element={<ViewDeckPage />} />
         <Route path="edit" loader={editDeckLoader} element={<EditDeckPage />} />
       </Route>
 

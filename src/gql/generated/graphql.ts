@@ -240,7 +240,7 @@ export type Query = {
   cards: PaginatedCards;
   class: Class;
   classes: PaginatedClasses;
-  /** Finds a user deck. */
+  /** Finds a deck. */
   deck: Deck;
   /** Finds all user decks. */
   decks: PaginatedDecks;
