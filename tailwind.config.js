@@ -16,7 +16,28 @@ module.exports = {
         900: '#151723',
       },
     },
-    extend: {},
+    extend: {
+      animation: {
+        'stretch-compress': 'stretch-compress 1.4s ease-in-out infinite',
+        spin: 'spin 1.4s linear infinite',
+      },
+      keyframes: {
+        'stretch-compress': {
+          '0%': {
+            strokeDasharray: '1px, 200px',
+            strokeDashoffset: '0',
+          },
+          '50%': {
+            strokeDasharray: '100px, 200px',
+            strokeDashoffset: '-15px',
+          },
+          '100%': {
+            strokeDasharray: '100px, 200px',
+            strokeDashoffset: '-125px',
+          },
+        },
+      },
+    },
   },
   plugins: [],
 };

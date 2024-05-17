@@ -9,11 +9,6 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  decorators: (Story) => (
-    <div style={{ maxWidth: 200 }}>
-      <Story />
-    </div>
-  ),
 } satisfies Meta<typeof CardDisplayComponent>;
 
 export default meta;

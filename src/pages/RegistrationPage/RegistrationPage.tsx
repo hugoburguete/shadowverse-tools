@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading';
 import RegistrationForm from '../../components/RegistrationForm';
 import { RegistrationDetails } from '../../components/RegistrationForm/RegistrationForm';
 import Heading from '../../components/typography/Heading';
@@ -55,7 +56,7 @@ const RegistrationPage = () => {
 
       <RegistrationForm onRegister={submitForm} />
 
-      {loading && <p>loading...</p>}
+      {loading && <Loading />}
 
       {error && (
         <ul>

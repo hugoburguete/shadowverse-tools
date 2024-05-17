@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading';
 import LoginForm, { LoginDetails } from '../../components/LoginForm/LoginForm';
 import Heading from '../../components/typography/Heading';
 import P from '../../components/typography/Paragraph';
@@ -53,7 +54,7 @@ const LoginPage = () => {
 
       <LoginForm onLogin={submitForm} />
 
-      {loading && <p>loading...</p>}
+      {loading && <Loading />}
 
       {error && (
         <ul>
