@@ -6,7 +6,7 @@ export type SmallProps = React.PropsWithChildren &
  */
 const Small = ({ children, ...rest }: SmallProps) => {
   return (
-    <small className={'dark:text-white text-sm ' + rest.className}>
+    <small className={'dark:text-vulcan-300 text-sm ' + rest.className}>
       {children}
     </small>
   );
