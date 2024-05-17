@@ -7,7 +7,7 @@ export const Layout: React.FC<LayoutProps> = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-20 bg-vulcan-900">
+      <main className="min-h-screen pt-16 px-3">
         <Outlet />
       </main>
     </>
