@@ -14,6 +14,9 @@ type AuthContextType = {
   refreshToken: string | null;
 };
 
+export const ACCESS_TOKEN_COOKIE_KEY = 'access-token';
+export const REFRESH_TOKEN_COOKIE_KEY = 'refresh-token';
+
 export const AuthContext = createContext<AuthContextType>({
   authenticated: false,
   authenticate: () => {},
@@ -30,8 +33,7 @@ export const AuthContextProvider = ({
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const authenticate = (accessToken: string, refreshToken: string) => {
-    Cookies.set('access-token', accessToken);
-    Cookies.set('refresh-token', refreshToken);
+    setAuthCookies(accessToken, refreshToken);
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
 
@@ -39,8 +41,9 @@ export const AuthContextProvider = ({
   };
 
   const logout = () => {
-    Cookies.remove('access-token');
-    Cookies.remove('refresh-token');
+    clearAuthCookies();
+    Cookies.remove(ACCESS_TOKEN_COOKIE_KEY);
+    Cookies.remove(REFRESH_TOKEN_COOKIE_KEY);
     setAccessToken(null);
     setRefreshToken(null);
 
@@ -48,8 +51,8 @@ export const AuthContextProvider = ({
   };
 
   useEffect(() => {
-    const at = Cookies.get('access-token');
-    const rt = Cookies.get('refresh-token');
+    const at = Cookies.get(ACCESS_TOKEN_COOKIE_KEY);
+    const rt = Cookies.get(REFRESH_TOKEN_COOKIE_KEY);
 
     if (at && rt) {
       setAuthenticated(true);
@@ -65,4 +68,14 @@ export const AuthContextProvider = ({
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const clearAuthCookies = () => {
+  Cookies.remove(ACCESS_TOKEN_COOKIE_KEY);
+  Cookies.remove(REFRESH_TOKEN_COOKIE_KEY);
+};
+
+export const setAuthCookies = (accessToken: string, refreshToken: string) => {
+  Cookies.set('access-token', accessToken);
+  Cookies.set('refresh-token', refreshToken);
 };
