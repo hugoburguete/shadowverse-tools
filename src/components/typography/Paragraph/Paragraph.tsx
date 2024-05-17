@@ -8,7 +8,7 @@ export type ParagraphProps = React.PropsWithChildren &
  * UI component for paragraph
  */
 const P = ({ children, ...rest }: ParagraphProps) => {
-  return <p className={'dark:text-white ' + rest.className}>{children}</p>;
+  return <p className={'dark:text-vulcan-300 ' + rest.className}>{children}</p>;
 };
 
 export default P;

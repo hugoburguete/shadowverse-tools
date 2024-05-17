@@ -9,7 +9,7 @@ import DeckListingPage, {
   loader as deckListingPageLoader,
 } from './pages/DeckListingPage';
 import EditDeckPage, { loader as editDeckLoader } from './pages/EditDeckPage';
-import Home from './pages/Home';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import ViewDeckPage, { loader as viewDeckLoader } from './pages/ViewDeckPage';
@@ -19,7 +19,7 @@ import GeneralErrorPage from './pages/errors/GeneralErrorPage';
 let router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />} errorElement={<GeneralErrorPage />}>
-      <Route path="/" index element={<Home />} />
+      <Route path="/" index element={<HomePage />} />
 
       {/* User routes */}
       <Route path="register" element={<RegistrationPage />} />
