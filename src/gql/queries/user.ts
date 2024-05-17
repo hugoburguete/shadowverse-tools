@@ -17,3 +17,12 @@ mutation Login($loginInput: LoginInput!) {
   }
 }
 `);
+
+export const MUTATION_REFRESH_USER_TOKEN = gql(`
+mutation RefreshToken($refreshToken: String!) {
+  refreshToken(refreshToken: $refreshToken) {
+    accessToken
+    refreshToken
+  }
+}
+`);
