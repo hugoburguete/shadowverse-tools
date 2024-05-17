@@ -11,6 +11,7 @@ import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
 import { createDeckCard } from '../../lib/helpers/card';
 import CardList from '../CardList';
 import CardSearchForm from '../CardSearchForm';
+import Loading from '../Loading';
 import Droppable from '../dnd/Droppable';
 import P from '../typography/Paragraph';
 
@@ -89,8 +90,7 @@ const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
         <CardSearchForm onSubmit={onSubmit} onFormatChange={onFormatChange} />
       </div>
       <Droppable id={CardDragSource.CARD_LIBRARY}>
-        {/* TODO: Loading bar */}
-        {loading && <P>Loading</P>}
+        {loading && <Loading />}
 
         {/* TODO: Format error messages */}
         {error && <P>Error : {error.message}</P>}
