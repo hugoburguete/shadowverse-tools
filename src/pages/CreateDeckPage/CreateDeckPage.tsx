@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
@@ -27,14 +28,18 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   });
 
   const [createDeck] = useMutation(MUTATION_CREATE_DECK);
-  const saveDeck = (newDeck: Deck) => {
-    createDeck({
+  const navigate = useNavigate();
+
+  const saveDeck = async (newDeck: Deck) => {
+    const result = await createDeck({
       variables: {
         createDeckInput: transformDeckToCreateDeckPayload(newDeck),
       },
     });
 
-    // TODO: Redirect to deck view
+    if (!result.errors) {
+      navigate(`/deck/${result.data?.createDeck.id}`);
+    }
   };
 
   const { handleDragEnd, handleDragStart, cardDraggedId } = useCardDragAndDrop(
