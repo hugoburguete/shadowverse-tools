@@ -4,6 +4,10 @@
 
 @layer base {
 	body {
-		@apply dark:text-white dark:bg-vulcan-900 min-h-screen relative;
+		@apply min-h-screen relative;
+	}
+
+	#root {
+		@apply dark:text-white dark:bg-vulcan-900;
 	}
 }
