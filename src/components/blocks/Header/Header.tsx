@@ -73,16 +73,10 @@ const Header: React.FC<HeaderProps> = () => {
               Create
             </Link>
             <Link
-              to="/deck/1/edit"
+              to="/decks"
               className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
             >
-              Edit
-            </Link>
-            <Link
-              to="/deck/1"
-              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
-            >
-              View
+              List
             </Link>
           </div>
           <a

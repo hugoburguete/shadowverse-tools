@@ -10,7 +10,8 @@ const DeckListingPage = () => {
       {decks.edges?.map(({ node }) => (
         <li key={`user-deck-${node.id}`}>
           <P>
-            <Link to={`/deck/${node.id}`}>{node.name}</Link>
+            <Link to={`/deck/${node.id}`}>{node.name}</Link> |{' '}
+            <Link to={`/deck/${node.id}`}>Edit</Link>
           </P>
         </li>
       ))}
