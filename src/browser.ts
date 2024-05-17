@@ -15,7 +15,7 @@ export const reportWebVitals = (onPerfEntry?: ReportHandler) => {
 export const setBrowserTheme = () => {
   const setThemeMode = (isDarkMode: boolean) => {
     var colorScheme = isDarkMode ? 'dark' : 'light';
-    document.body.classList.add(colorScheme);
+    document.querySelector('html')?.classList.add(colorScheme);
   };
 
   if (
