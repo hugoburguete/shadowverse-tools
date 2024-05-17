@@ -1,12 +1,14 @@
-import React from 'react';
-import Icon from '../../Icon';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../state/auth';
+import Icon from '../../Icon';
 import { Icons } from '../../Icon/Icon';
 
 export type HeaderProps = {};
 
 const Header: React.FC<HeaderProps> = () => {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
+  const { authenticated, logout } = useContext(AuthContext);
 
   return (
     <header className="fixed top-0 w-full clearNav z-50">
@@ -36,15 +38,45 @@ const Header: React.FC<HeaderProps> = () => {
           <div className="md:ml-auto md:mr-auto font-4 pt-1 md:pl-14 pl-1 flex flex-wrap items-center md:text-base text-1xl md:justify-center justify-items-start">
             <Link
               to="/"
-              className="mr-11 pr-2 cursor-pointer text-gray-300 hover:text-white font-semibold tr04"
+              className="mr-11 pr-2 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
             >
               Home
             </Link>
+            {!authenticated && (
+              <>
+                <Link
+                  to="/login"
+                  className="mr-11 pr-2 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="mr-11 pr-2 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+            {authenticated && (
+              <button
+                className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+                onClick={() => logout()}
+              >
+                Logout
+              </button>
+            )}
             <Link
-              to="/deck-builder"
-              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 hover:text-white font-semibold tr04"
+              to="/deck"
+              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
             >
-              Deck Builder
+              Create
+            </Link>
+            <Link
+              to="/decks"
+              className="mr-12 md:ml-11 ml-0 cursor-pointer text-gray-300 dark:text-white hover:text-white font-semibold tr04"
+            >
+              List
             </Link>
           </div>
           <a

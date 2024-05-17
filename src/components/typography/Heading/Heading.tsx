@@ -13,29 +13,6 @@ export type HeadingProps = React.PropsWithChildren &
  * UI component for heading
  */
 export const Heading = ({ children, level = 1, ...rest }: HeadingProps) => {
-  // h1: {
-  //   fontSize: em(30, 14),
-  //   marginTop: '0',
-  //   marginBottom: em(24, 30),
-  //   lineHeight: round(36 / 30),
-  // },
-  // h2: {
-  //   fontSize: em(20, 14),
-  //   marginTop: em(32, 20),
-  //   marginBottom: em(16, 20),
-  //   lineHeight: round(28 / 20),
-  // },
-  // h3: {
-  //   fontSize: em(18, 14),
-  //   marginTop: em(28, 18),
-  //   marginBottom: em(8, 18),
-  //   lineHeight: round(28 / 18),
-  // },
-  // h4: {
-  //   marginTop: em(20, 14),
-  //   marginBottom: em(8, 14),
-  //   lineHeight: round(20 / 14),
-  // },
   switch (level) {
     case 1:
       return (

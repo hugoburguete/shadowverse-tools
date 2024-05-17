@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { makeCard } from '../../../.storybook/factories/card';
+import { CardSimplified } from '../../entities/card';
 import { CardDisplay as CardDisplayComponent } from './CardDisplay';
 
 const meta = {
@@ -19,16 +21,6 @@ type Story = StoryObj<typeof meta>;
 
 export const CardDisplay: Story = {
   args: {
-    card: {
-      cardId: 'BP01-LD10',
-      image: 'https://images.shadowcard.io/images/cards/BP01-LD10.jpg',
-      name: 'Urias',
-      class: {
-        id: 1,
-        name: 'Abysscraft',
-      },
-      type: 'Leader',
-      rarity: { acronym: 'LG' },
-    },
+    card: makeCard() as CardSimplified,
   },
 };

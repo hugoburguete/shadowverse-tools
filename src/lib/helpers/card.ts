@@ -1,4 +1,14 @@
-import { CardSimplified, Deck, DeckCard } from '../../entities/card';
+import {
+  CardSimplified,
+  Deck,
+  DeckCard,
+  DeckFormat,
+} from '../../entities/card';
+import {
+  CreateDeckInput,
+  DeckCardInput,
+  GetDeckQuery,
+} from '../../gql/generated/graphql';
 import { getValidator } from '../validators';
 
 export const LEADER_CARD_TYPES = ['Leader'];
@@ -69,9 +79,9 @@ export const removeCardFromDeck = (cardId: string, deck: Deck): Deck => {
     // Remove leader
     deck.leader = null;
   } else {
-    let card;
-
-    card = deck.evolveList.find((evolveCard) => evolveCard.cardId === cardId);
+    let card = deck.evolveList.find(
+      (evolveCard) => evolveCard.cardId === cardId
+    );
 
     if (card) {
       // Remove evolve card
@@ -112,4 +122,54 @@ const removeCardFromCardList = (
   }
 
   return cardList;
+};
+
+export const transformDeckToCreateDeckPayload = (
+  deck: Deck
+): CreateDeckInput => {
+  const { format, name } = deck;
+  const cardMapper = (card: DeckCard) => {
+    return {
+      cardId: card.id,
+      quantity: card.quantity,
+    };
+  };
+  const deckCards: DeckCardInput[] = deck.deckList
+    .map(cardMapper)
+    .concat(deck.evolveList.map(cardMapper));
+  deckCards.push(cardMapper(deck.leader as DeckCard));
+
+  return {
+    format,
+    name: name as string,
+    deckCards,
+  };
+};
+
+export const transformDeckQueryToDeck = ({ deck }: GetDeckQuery): Deck => {
+  let leader: DeckCard | null = null;
+  const deckList: DeckCard[] = [];
+  const evolveList: DeckCard[] = [];
+
+  for (let i = 0; i < deck.cards.length; i++) {
+    const card = { ...deck.cards[i] } as DeckCard;
+    card.quantity =
+      deck.cardsInfo.find((info) => info.cardId === card.id)?.quantity || 0;
+
+    if (LEADER_CARD_TYPES.includes(card.type)) {
+      leader = card;
+    } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
+      evolveList.push(card);
+    } else {
+      deckList.push(card);
+    }
+  }
+
+  return {
+    name: deck.name,
+    format: deck.format as DeckFormat,
+    leader,
+    deckList,
+    evolveList,
+  };
 };

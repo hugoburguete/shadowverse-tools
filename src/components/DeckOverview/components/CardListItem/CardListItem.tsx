@@ -1,4 +1,5 @@
 import { CardDragSource, DeckCard } from '../../../../entities/card';
+import { LEADER_CARD_TYPES } from '../../../../lib/helpers/card';
 import Draggable from '../../../dnd/Draggable';
 import P from '../../../typography/Paragraph';
 
@@ -17,7 +18,7 @@ const CardListItem: React.FC<CardListItemProps> = ({ card }) => {
       >
         <p className="absolute left-0 top-0 bottom-0 text-center w-[45px]">
           <span className="text-white block mb-0 leading-1">
-            {card.type ? card.cost : ''}
+            {!LEADER_CARD_TYPES.includes(card.type) ? card.cost : '-'}
           </span>
           <span className="text-white block text-xs">
             {card.rarity.acronym}

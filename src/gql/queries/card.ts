@@ -2,6 +2,7 @@ import { gql } from '../generated';
 
 export const FRAGMENT_SEARCH_CARDS = gql(`
   fragment CardSearchResult on Card {
+    id
     attack
     cardId
     class {
