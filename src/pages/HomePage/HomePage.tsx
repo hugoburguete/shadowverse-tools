@@ -36,6 +36,7 @@ const Home: React.FC<HomeProps> = () => {
             </div>
             <div className="border border-vulcan-300 rounded-lg p-2">
               <Image
+                aspectRatio="908/648"
                 src="./deck-builder-preview.png"
                 alt="deck builder preview"
               />
