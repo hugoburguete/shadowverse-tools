@@ -1,5 +1,11 @@
 import { useMutation } from '@apollo/client';
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardDisplay from '../../components/CardDisplay';
@@ -29,6 +35,13 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
 
   const [createDeck] = useMutation(MUTATION_CREATE_DECK);
   const navigate = useNavigate();
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   const saveDeck = async (newDeck: Deck) => {
     const result = await createDeck({
@@ -65,11 +78,16 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
       </Heading>
 
       <div className="flex items-start">
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
+          sensors={sensors}
+        >
           {/* Card library */}
           <div className="w-full">
             <CardGallery
               onCardSearch={setCardPool}
+              onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
               onFormatChange={onFormatChange}
             />
           </div>

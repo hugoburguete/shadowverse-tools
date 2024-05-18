@@ -10,6 +10,7 @@ import { QueryCardsArgs, SearchCardsQuery } from '../../gql/generated/graphql';
 import { QUERY_SEARCH_CARDS } from '../../gql/queries/card';
 import { createDeckCard } from '../../lib/helpers/card';
 import CardList from '../CardList';
+import { CardClickEvent } from '../CardList/CardList';
 import CardSearchForm from '../CardSearchForm';
 import ErrorList from '../ErrorList';
 import Loading from '../Loading';
@@ -18,9 +19,14 @@ import Droppable from '../dnd/Droppable';
 export type CardGalleryProps = {
   onCardSearch: (cards: CardSimplified[]) => void;
   onFormatChange: (format: DeckFormat) => void;
+  onCardClick?: CardClickEvent;
 };
 
-const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
+const CardGallery = ({
+  onCardSearch,
+  onFormatChange,
+  onCardClick,
+}: CardGalleryProps) => {
   const [variables, setVariables] = useState<QueryCardsArgs>({
     searchTerm: '',
     cost: [],
@@ -97,6 +103,7 @@ const CardGallery = ({ onCardSearch, onFormatChange }: CardGalleryProps) => {
         <CardList
           cards={cardsForDisplay || []}
           source={CardDragSource.CARD_LIBRARY}
+          onCardClick={onCardClick}
         />
       </Droppable>
     </div>
