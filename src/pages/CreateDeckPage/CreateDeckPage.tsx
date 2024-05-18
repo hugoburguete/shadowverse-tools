@@ -60,14 +60,14 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
 
   return (
     <div className="min-h-full">
+      <Heading level={1} className="text-center">
+        Deck builder
+      </Heading>
+
       <div className="flex items-start">
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           {/* Card library */}
           <div className="w-full">
-            <Heading level={1} className="text-center">
-              Deck builder
-            </Heading>
-
             <CardGallery
               onCardSearch={setCardPool}
               onFormatChange={onFormatChange}
