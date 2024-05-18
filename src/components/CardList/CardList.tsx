@@ -3,15 +3,18 @@ import Badge from '../Badge';
 import { CardDisplay } from '../CardDisplay/CardDisplay';
 import Draggable from '../dnd/Draggable';
 
+export type CardClickEvent = (card: DeckCard) => void;
 export type CardListProps = {
   cards: DeckCard[];
   source: CardDragSource;
   showQuantity?: boolean;
+  onCardClick?: CardClickEvent;
 };
 
 const CardList: React.FC<CardListProps> = ({
   cards,
   source,
+  onCardClick,
   showQuantity = false,
 }) => {
   return (
@@ -26,7 +29,7 @@ const CardList: React.FC<CardListProps> = ({
             {showQuantity && (
               <Badge className="absolute m-2">{card.quantity}</Badge>
             )}
-            <CardDisplay card={card} />
+            <CardDisplay card={card} onClick={() => onCardClick?.(card)} />
           </Draggable>
         </div>
       ))}
