@@ -114,9 +114,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
         Card search
       </Heading>
       <FormGroup>
-        <Label className="mt-1 min-w-14" htmlFor="filter-search">
-          Search:{' '}
-        </Label>
+        <Label htmlFor="filter-search">Search: </Label>
         <SearchInput
           className="w-full"
           id={'filter-search'}
@@ -132,7 +130,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
       </Button>
 
       <div
-        className={`max-h-0 transition-all duration-200 overflow-hidden ${searchFiltersToggled ? '' : 'max-h-72'} border-b border-vulcan-800 mb-3 pb-3`}
+        className={`max-h-0 transition-all duration-200 overflow-hidden ${searchFiltersToggled ? '' : 'max-h-96'} border-b border-vulcan-800 mb-3 pb-3`}
       >
         <FormGroup className="border-t border-vulcan-800 mt-3 pt-3">
           <Label className="mt-1 min-w-14" htmlFor="filter-format" faux>
@@ -152,7 +150,7 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
           ))}
         </FormGroup>
 
-        <FormGroup>
+        <FormGroup className="items-start">
           <Label className="mt-1 min-w-14" htmlFor="card-search-form">
             Class:{' '}
           </Label>
@@ -195,18 +193,21 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
           <Label className="mt-1 min-w-14" htmlFor="card-search-form">
             Type:{' '}
           </Label>
-          {cardTypes.map((type) => (
-            <Checkbox
-              id={`filter-type-${type}`}
-              key={`filter-type-${type}`}
-              name="cost"
-              value={type}
-              checked={selectedTypes.includes(type)}
-              onChange={onTypeSelected}
-            >
-              {type}
-            </Checkbox>
-          ))}
+
+          <div className="flex flex-wrap gap-1">
+            {cardTypes.map((type) => (
+              <Checkbox
+                id={`filter-type-${type}`}
+                key={`filter-type-${type}`}
+                name="cost"
+                value={type}
+                checked={selectedTypes.includes(type)}
+                onChange={onTypeSelected}
+              >
+                {type}
+              </Checkbox>
+            ))}
+          </div>
         </FormGroup>
 
         {!loading && (
@@ -239,18 +240,21 @@ const CardSearchForm: React.FC<CardSearchFormProps> = ({
               >
                 Rarity:{' '}
               </Label>
-              {rarities.map((rarity) => (
-                <Checkbox
-                  id={`filter-rarity-${rarity.id}`}
-                  key={`filter-rarity-${rarity.id}`}
-                  name="rarity"
-                  value={rarity.id}
-                  checked={selectedRarities.includes(rarity.id)}
-                  onChange={onRaritySelected}
-                >
-                  {rarity.name}
-                </Checkbox>
-              ))}
+
+              <div className="flex flex-wrap gap-1">
+                {rarities.map((rarity) => (
+                  <Checkbox
+                    id={`filter-rarity-${rarity.id}`}
+                    key={`filter-rarity-${rarity.id}`}
+                    name="rarity"
+                    value={rarity.id}
+                    checked={selectedRarities.includes(rarity.id)}
+                    onChange={onRaritySelected}
+                  >
+                    {rarity.name}
+                  </Checkbox>
+                ))}
+              </div>
             </FormGroup>
           </>
         )}

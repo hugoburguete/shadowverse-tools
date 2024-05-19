@@ -26,7 +26,7 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({
 }) => {
   const { authenticated } = useContext(AuthContext);
   const [name, setName] = useState(deck.name || 'New deck');
-  const [viewType, setViewType] = useState<ViewType>('icons');
+  const [listType, setListType] = useState<ViewType>('icons');
   const allCards = useMemo(() => {
     let cards = [];
     if (deck.leader) {
@@ -52,11 +52,12 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({
   return (
     <>
       {/* Deck customisations */}
-      <div className="mb-3">
-        <div className="flex justify-between items-center">
+      <div className="mb-3 text-center">
+        <div className="md:flex justify-between items-center">
           <FormGroup className="mb-0">
-            <Label>Deck name: </Label>
+            <Label className="text-nowrap">Deck name: </Label>
             <Input
+              className="w-full"
               type="text"
               value={name}
               onChange={(e) => {
@@ -65,12 +66,14 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({
             />
           </FormGroup>
           {authenticated && (
-            <Button onClick={() => onDeckSave(deck)}>Save deck</Button>
+            <Button className="mt-3 md:mt-0" onClick={() => onDeckSave(deck)}>
+              Save deck
+            </Button>
           )}
 
           {!authenticated && (
-            <Button asLink to="/login">
-              Login to save your deck
+            <Button className="mt-3 md:mt-0" asLink to="/login">
+              Login to save
             </Button>
           )}
         </div>
@@ -80,16 +83,19 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({
         id={CardDragSource.DECK}
         className="border border-vulcan-800 p-3 rounded-lg"
       >
-        <div className="mb-3 flex">
-          <P>{deck.leader ? '1' : 'No'} leader</P>
-          <P className="mx-4">|</P>
-          <P>{deckListCardQty} cards</P>
-          <P className="mx-4">|</P>
-          <P>{evolveListCardQty} evolve cards</P>
-        </div>
-        {viewType === 'icons' && (
+        {/* Card quantities */}
+        <P className="mb-3 flex">
+          {deck.leader ? '1' : 'No'} leader{' '}
+          <span className="mx-2 md:mx-4">|</span>
+          {deckListCardQty} cards
+          <span className="mx-2 md:mx-4">|</span>
+          {evolveListCardQty} evolve cards
+        </P>
+
+        {/* Card List (icons) */}
+        {listType === 'icons' && (
           <CardList
-            className="gap-1 lg:gap-3 grid-cols-4 md:grid-cols-6"
+            className="gap-2 xs:gap-3 grid-cols-3 xs:grid-cols-4 lg:grid-cols-6"
             cards={allCards}
             source={CardDragSource.DECK}
             showQuantity
@@ -97,7 +103,8 @@ const DeckOverview: React.FC<DeckOverviewProps> = ({
           />
         )}
 
-        {viewType === 'list' && (
+        {/* Card List (list) */}
+        {listType === 'list' && (
           <>
             {/* Leader */}
             <P className="text-center">Leader</P>

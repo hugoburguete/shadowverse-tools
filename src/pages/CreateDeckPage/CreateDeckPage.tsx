@@ -8,6 +8,7 @@ import {
 } from '@dnd-kit/core';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
@@ -21,6 +22,11 @@ import {
 import { getValidator } from '../../lib/validators';
 import useCardDragAndDrop from './useCardDragAndDrop';
 
+export enum ToggleableView {
+  DeckOverview,
+  CardLibrary,
+}
+
 export type CreateDeckProps = {};
 
 const CreateDeckPage: React.FC<CreateDeckProps> = () => {
@@ -31,6 +37,9 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     deckList: [],
     evolveList: [],
   });
+  const [toggledView, setToggledView] = useState<ToggleableView>(
+    ToggleableView.DeckOverview
+  );
 
   const [createDeck] = useMutation(MUTATION_CREATE_DECK);
   const navigate = useNavigate();
@@ -73,14 +82,16 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   return (
     <div className="h-full relative">
       <div className="absolute top-0 left-0 right-0 bottom-0">
-        <div className="lg:flex items-start gap-3 h-full">
+        <div className="md:flex items-start gap-3 h-full">
           <DndContext
             onDragEnd={handleDragEnd}
             onDragStart={handleDragStart}
             sensors={sensors}
           >
             {/* Deck Overview */}
-            <div className="lg:w-3/5">
+            <div
+              className={`${toggledView === ToggleableView.DeckOverview ? 'block' : 'hidden'} md:block mb-3 md:w-1/2 lg:w-3/5`}
+            >
               <DeckOverview
                 deck={deck}
                 onDeckSave={saveDeck}
@@ -91,7 +102,9 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
             </div>
 
             {/* Card library */}
-            <div className="lg:w-2/5 h-full">
+            <div
+              className={`${toggledView === ToggleableView.CardLibrary ? 'block' : 'hidden'} md:block md:w-1/2 lg:w-2/5 h-full`}
+            >
               <CardGallery
                 onCardSearch={setCardPool}
                 onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
@@ -104,6 +117,22 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
             </DragOverlay>
           </DndContext>
         </div>
+      </div>
+
+      {/* View toggler for mobile users */}
+      <div className="fixed bottom-0 left-0 right-0 flex md:hidden bg-vulcan-900">
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.DeckOverview)}
+        >
+          Deck
+        </Button>
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.CardLibrary)}
+        >
+          Card search
+        </Button>
       </div>
     </div>
   );

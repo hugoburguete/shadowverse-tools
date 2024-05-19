@@ -112,7 +112,7 @@ const CardGallery = ({
         {error && <ErrorList errors={[error.message]} />}
 
         <CardList
-          className="grid-cols-4 gap-2"
+          className="grid-cols-3 md:grid-cols-4 gap-2"
           cards={cardsForDisplay || []}
           source={CardDragSource.CARD_LIBRARY}
           onCardClick={onCardClick}

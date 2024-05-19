@@ -9,10 +9,7 @@
 }
 
 @layer components {
-	.base-label {
-		@apply text-sm dark:text-white mt-1;
-	}
 	.base-form-group {
-		@apply flex mb-2 gap-2;
+		@apply flex items-center mb-2 gap-2;
 	}
 }
