@@ -10,7 +10,7 @@ const FormGroup = ({
   ...rest
 }: FormGroupProps): JSX.Element => {
   return (
-    <div className={`flex items-center mb-2 ${className}`} {...rest}>
+    <div className={`base-form-group ${className}`} {...rest}>
       {children}
     </div>
   );

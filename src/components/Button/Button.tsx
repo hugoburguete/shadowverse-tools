@@ -13,6 +13,7 @@ const Button = ({
   children,
   to,
   asLink = false,
+  className,
   ...rest
 }: ButtonProps): JSX.Element => {
   // TODO: Filled and unfilled, primary and secondary buttons return ( <button
@@ -24,7 +25,7 @@ const Button = ({
         className={`inline-block px-5 py-2 border bg-transparent
       border-vulcan-800 rounded-lg appearance-none text-indigo-300
         hover:text-indigo-400 focus:border-indigo-300 focus:bg-transparent
-        focus:outline-none hover:bg-indigo-300/5 sm:text-sm ${rest.className}`}
+        focus:outline-none hover:bg-indigo-300/5 sm:text-sm ${className || ''}`}
       >
         {children}
       </Link>
@@ -33,7 +34,7 @@ const Button = ({
   // className={`px-5 py-2 border bg-indigo-400 border-vulcan-800 rounded-lg
   //   appearance-none text-white hover:text-indigo-400 focus:border-indigo-300
   //     focus:bg-transparent focus:outline-none hover:bg-indigo-300/5
-  //     sm:text-sm ${rest.className ?? ''}`} {...rest}
+  //     sm:text-sm ${className ?? ''}`} {...rest}
   //   >
   //     {children}
   //   </button> );
@@ -43,9 +44,7 @@ const Button = ({
       className={`px-5 py-2 border bg-transparent
     border-vulcan-800 rounded-lg appearance-none text-indigo-300
       hover:text-indigo-400 focus:border-indigo-300 focus:bg-transparent
-      focus:outline-none hover:bg-indigo-300/5 sm:text-sm ${
-        rest.className ?? ''
-      }`}
+      focus:outline-none hover:bg-indigo-300/5 sm:text-sm ${className || ''}`}
       {...rest}
     >
       {children}

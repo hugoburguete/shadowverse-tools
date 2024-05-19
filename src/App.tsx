@@ -5,7 +5,7 @@ import { AuthContextProvider } from './state/auth';
 function App() {
   return (
     <AuthContextProvider>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </AuthContextProvider>
   );
 }

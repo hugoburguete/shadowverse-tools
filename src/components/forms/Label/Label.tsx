@@ -15,10 +15,10 @@ const Label = ({
   ...rest
 }: LabelProps): JSX.Element => {
   if (faux) {
-    <P className={`text-sm mr-4 dark:text-white ${className}`}>{children}</P>;
+    <P className={`text-sm dark:text-white ${className}`}>{children}</P>;
   }
   return (
-    <label className={`text-sm mr-4 dark:text-white ${className}`} {...rest}>
+    <label className={`text-sm dark:text-white ${className}`} {...rest}>
       {children}
     </label>
   );

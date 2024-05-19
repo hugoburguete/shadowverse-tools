@@ -8,10 +8,10 @@ import {
 } from '@dnd-kit/core';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
-import Heading from '../../components/typography/Heading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
 import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
 import {
@@ -21,6 +21,11 @@ import {
 } from '../../lib/helpers/card';
 import { getValidator } from '../../lib/validators';
 import useCardDragAndDrop from './useCardDragAndDrop';
+
+export enum ToggleableView {
+  DeckOverview,
+  CardLibrary,
+}
 
 export type CreateDeckProps = {};
 
@@ -32,6 +37,9 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     deckList: [],
     evolveList: [],
   });
+  const [toggledView, setToggledView] = useState<ToggleableView>(
+    ToggleableView.DeckOverview
+  );
 
   const [createDeck] = useMutation(MUTATION_CREATE_DECK);
   const navigate = useNavigate();
@@ -72,33 +80,59 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   return (
-    <div className="min-h-full">
-      <Heading level={1} className="text-center">
-        Deck builder
-      </Heading>
+    <div className="h-full relative">
+      <div className="absolute top-0 left-0 right-0 bottom-0">
+        <div className="md:flex items-start gap-3 h-full">
+          <DndContext
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+            sensors={sensors}
+          >
+            {/* Deck Overview */}
+            <div
+              className={`${toggledView === ToggleableView.DeckOverview ? 'block' : 'hidden'} md:block mb-3 md:w-1/2 lg:w-3/5`}
+            >
+              <DeckOverview
+                deck={deck}
+                onDeckSave={saveDeck}
+                onCardClick={({ cardId }) =>
+                  setDeck(removeCardFromDeck(cardId, deck))
+                }
+              />
+            </div>
 
-      <div className="flex items-start">
-        <DndContext
-          onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-          sensors={sensors}
+            {/* Card library */}
+            <div
+              className={`${toggledView === ToggleableView.CardLibrary ? 'block' : 'hidden'} md:block md:w-1/2 lg:w-2/5 h-full`}
+            >
+              <CardGallery
+                onCardSearch={setCardPool}
+                onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
+                onFormatChange={onFormatChange}
+              />
+            </div>
+
+            <DragOverlay dropAnimation={null}>
+              {cardDragged && <CardDisplay card={cardDragged} />}
+            </DragOverlay>
+          </DndContext>
+        </div>
+      </div>
+
+      {/* View toggler for mobile users */}
+      <div className="fixed bottom-0 left-0 right-0 flex md:hidden bg-vulcan-900">
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.DeckOverview)}
         >
-          {/* Card library */}
-          <div className="w-full">
-            <CardGallery
-              onCardSearch={setCardPool}
-              onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
-              onFormatChange={onFormatChange}
-            />
-          </div>
-
-          {/* Deck Overview */}
-          <DeckOverview deck={deck} onDeckSave={saveDeck} />
-
-          <DragOverlay dropAnimation={null}>
-            {cardDragged && <CardDisplay card={cardDragged} />}
-          </DragOverlay>
-        </DndContext>
+          Deck
+        </Button>
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.CardLibrary)}
+        >
+          Card search
+        </Button>
       </div>
     </div>
   );

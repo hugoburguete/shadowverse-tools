@@ -16,7 +16,7 @@ const Droppable: React.FC<DroppableProps> = ({
 }) => {
   const { isOver, setNodeRef } = useDroppable({ id, data });
   const style = {
-    backgroundColor: isOver ? 'green' : '',
+    backgroundColor: isOver ? 'rgba(255,255,255,0.03)' : '',
   };
 
   return (

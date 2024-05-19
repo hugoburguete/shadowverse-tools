@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CardDragSource,
   CardSimplified,
@@ -43,6 +43,7 @@ const CardGallery = ({
     },
     [setVariables]
   );
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const getCardsFromData = (
     data: SearchCardsQuery | undefined
@@ -60,6 +61,12 @@ const CardGallery = ({
 
   // Apply infinite load
   useEffect(() => {
+    // FIXME: I broke this.
+    const div = containerRef.current;
+    if (!div) {
+      return;
+    }
+
     const loadMore = () => {
       const amountScrolled =
         window.innerHeight + document.documentElement.scrollTop;
@@ -80,9 +87,10 @@ const CardGallery = ({
       }
     };
 
-    window.addEventListener('scroll', loadMore);
-    return () => window.removeEventListener('scroll', loadMore);
-  }, [fetchMore, refetching, setRefetching, data]);
+    div.addEventListener('scroll', loadMore);
+
+    return () => div.removeEventListener('scroll', loadMore);
+  }, [fetchMore, refetching, setRefetching, data, containerRef]);
 
   useEffect(() => {
     setCardsForDisplay(
@@ -91,7 +99,10 @@ const CardGallery = ({
   }, [data, setCardsForDisplay]);
 
   return (
-    <div className="w-full flex flex-col">
+    <div
+      className="h-full border border-vulcan-800 p-3 rounded-lg flex flex-col overflow-auto"
+      ref={containerRef}
+    >
       <div className="flex">
         <CardSearchForm onSubmit={onSubmit} onFormatChange={onFormatChange} />
       </div>
@@ -101,6 +112,7 @@ const CardGallery = ({
         {error && <ErrorList errors={[error.message]} />}
 
         <CardList
+          className="grid-cols-3 md:grid-cols-4 gap-2"
           cards={cardsForDisplay || []}
           source={CardDragSource.CARD_LIBRARY}
           onCardClick={onCardClick}

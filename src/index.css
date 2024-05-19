@@ -7,3 +7,9 @@
 		@apply min-h-screen relative dark:text-white dark:bg-vulcan-900;
 	}
 }
+
+@layer components {
+	.base-form-group {
+		@apply flex items-center mb-2 gap-2;
+	}
+}
