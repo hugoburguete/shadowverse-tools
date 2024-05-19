@@ -137,7 +137,10 @@ export const transformDeckToCreateDeckPayload = (
   const deckCards: DeckCardInput[] = deck.deckList
     .map(cardMapper)
     .concat(deck.evolveList.map(cardMapper));
-  deckCards.push(cardMapper(deck.leader as DeckCard));
+
+  if (deck.leader) {
+    deckCards.push(cardMapper(deck.leader));
+  }
 
   return {
     format,

@@ -67,14 +67,20 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     (cardId) => {
       const card = cardPool.find((card) => card.cardId === cardId);
       if (card) {
-        setDeck(addCardToDeck(card, deck));
+        locallyStoreDeck(addCardToDeck(card, deck));
       }
     },
-    (cardId) => setDeck(removeCardFromDeck(cardId as string, deck))
+    (cardId) => locallyStoreDeck(removeCardFromDeck(cardId as string, deck))
   );
 
   const onFormatChange = (format: DeckFormat) => {
     setDeck({ ...getValidator({ ...deck, format }).validate() });
+  };
+
+  const locallyStoreDeck = (deck: Deck) => {
+    const payload = transformDeckToCreateDeckPayload(deck);
+    localStorage.setItem('temp-deck', JSON.stringify(payload));
+    setDeck(deck);
   };
 
   const loadedCards: CardSimplified[] = cardPool
@@ -100,7 +106,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
                 deck={deck}
                 onDeckSave={saveDeck}
                 onCardClick={({ cardId }) =>
-                  setDeck(removeCardFromDeck(cardId, deck))
+                  locallyStoreDeck(removeCardFromDeck(cardId, deck))
                 }
               />
             </div>
@@ -111,7 +117,9 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
             >
               <CardGallery
                 onCardSearch={setCardPool}
-                onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
+                onCardClick={(card) =>
+                  locallyStoreDeck(addCardToDeck(card, deck))
+                }
                 onFormatChange={onFormatChange}
               />
             </div>
