@@ -1,11 +1,17 @@
 import { useMutation } from '@apollo/client';
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { useState } from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
+import Button from '../../components/Button';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
-import Heading from '../../components/typography/Heading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
 import { GetDeckQuery } from '../../gql/generated/graphql';
 import { MUTATION_UPDATE_DECK } from '../../gql/queries/deck';
@@ -16,6 +22,7 @@ import {
   transformDeckToCreateDeckPayload,
 } from '../../lib/helpers/card';
 import { getValidator } from '../../lib/validators';
+import { ToggleableView } from '../CreateDeckPage/CreateDeckPage';
 import useCardDragAndDrop from '../CreateDeckPage/useCardDragAndDrop';
 
 const EditDeckPage = (): JSX.Element => {
@@ -23,6 +30,16 @@ const EditDeckPage = (): JSX.Element => {
   const deckData = useLoaderData() as GetDeckQuery;
   const { deckId } = useParams();
   const [deck, setDeck] = useState<Deck>(transformDeckQueryToDeck(deckData));
+  const [toggledView, setToggledView] = useState<ToggleableView>(
+    ToggleableView.DeckOverview
+  );
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   const { handleDragEnd, handleDragStart, cardDraggedId } = useCardDragAndDrop(
     (cardId) => {
@@ -52,28 +69,59 @@ const EditDeckPage = (): JSX.Element => {
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   return (
-    <div className="min-h-full">
-      <div className="flex items-start">
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-          {/* Card library */}
-          <div className="w-full">
-            <Heading level={1} className="text-center">
-              Deck builder
-            </Heading>
+    <div className="h-full relative">
+      <div className="absolute top-0 left-0 right-0 bottom-0">
+        <div className="md:flex items-start gap-3 h-full">
+          <DndContext
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+            sensors={sensors}
+          >
+            {/* Deck Overview */}
+            <div
+              className={`${toggledView === ToggleableView.DeckOverview ? 'block' : 'hidden'} md:block mb-3 md:w-1/2 lg:w-3/5`}
+            >
+              <DeckOverview
+                deck={deck}
+                onDeckSave={saveDeck}
+                onCardClick={({ cardId }) =>
+                  setDeck(removeCardFromDeck(cardId, deck))
+                }
+              />
+            </div>
 
-            <CardGallery
-              onCardSearch={setCardPool}
-              onFormatChange={onFormatChange}
-            />
-          </div>
+            {/* Card library */}
+            <div
+              className={`${toggledView === ToggleableView.CardLibrary ? 'block' : 'hidden'} md:block md:w-1/2 lg:w-2/5 h-full`}
+            >
+              <CardGallery
+                onCardSearch={setCardPool}
+                onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
+                onFormatChange={onFormatChange}
+              />
+            </div>
 
-          {/* Deck Overview */}
-          <DeckOverview deck={deck} onDeckSave={saveDeck} />
+            <DragOverlay dropAnimation={null}>
+              {cardDragged && <CardDisplay card={cardDragged} />}
+            </DragOverlay>
+          </DndContext>
+        </div>
+      </div>
 
-          <DragOverlay dropAnimation={null}>
-            {cardDragged && <CardDisplay card={cardDragged} />}
-          </DragOverlay>
-        </DndContext>
+      {/* View toggler for mobile users */}
+      <div className="fixed bottom-0 left-0 right-0 flex md:hidden bg-vulcan-900">
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.DeckOverview)}
+        >
+          Deck
+        </Button>
+        <Button
+          className="rounded-none w-1/2"
+          onClick={() => setToggledView(ToggleableView.CardLibrary)}
+        >
+          Card search
+        </Button>
       </div>
     </div>
   );
