@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
-import Heading from '../../components/typography/Heading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
 import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
 import {
@@ -72,33 +71,39 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
 
   return (
-    <div className="min-h-full">
-      <Heading level={1} className="text-center">
-        Deck builder
-      </Heading>
+    <div className="h-full relative">
+      <div className="absolute top-0 left-0 right-0 bottom-0">
+        <div className="lg:flex items-start gap-3 h-full">
+          <DndContext
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
+            sensors={sensors}
+          >
+            {/* Deck Overview */}
+            <div className="lg:w-3/5">
+              <DeckOverview
+                deck={deck}
+                onDeckSave={saveDeck}
+                onCardClick={({ cardId }) =>
+                  setDeck(removeCardFromDeck(cardId, deck))
+                }
+              />
+            </div>
 
-      <div className="flex items-start">
-        <DndContext
-          onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-          sensors={sensors}
-        >
-          {/* Card library */}
-          <div className="w-full">
-            <CardGallery
-              onCardSearch={setCardPool}
-              onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
-              onFormatChange={onFormatChange}
-            />
-          </div>
+            {/* Card library */}
+            <div className="lg:w-2/5 h-full">
+              <CardGallery
+                onCardSearch={setCardPool}
+                onCardClick={(card) => setDeck(addCardToDeck(card, deck))}
+                onFormatChange={onFormatChange}
+              />
+            </div>
 
-          {/* Deck Overview */}
-          <DeckOverview deck={deck} onDeckSave={saveDeck} />
-
-          <DragOverlay dropAnimation={null}>
-            {cardDragged && <CardDisplay card={cardDragged} />}
-          </DragOverlay>
-        </DndContext>
+            <DragOverlay dropAnimation={null}>
+              {cardDragged && <CardDisplay card={cardDragged} />}
+            </DragOverlay>
+          </DndContext>
+        </div>
       </div>
     </div>
   );

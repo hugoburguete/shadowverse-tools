@@ -10,6 +10,8 @@ module.exports = {
       transparent: colors.transparent,
       black: colors.black,
       white: colors.white,
+      danger: colors.red,
+      success: colors.green,
       vulcan: {
         300: '#9FA5C6',
         800: '#282C43',

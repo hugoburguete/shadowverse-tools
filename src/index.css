@@ -7,3 +7,12 @@
 		@apply min-h-screen relative dark:text-white dark:bg-vulcan-900;
 	}
 }
+
+@layer components {
+	.base-label {
+		@apply text-sm dark:text-white mt-1;
+	}
+	.base-form-group {
+		@apply flex mb-2 gap-2;
+	}
+}
