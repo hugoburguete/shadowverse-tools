@@ -5,13 +5,15 @@ export type LayoutProps = {};
 
 export const Layout: React.FC<LayoutProps> = () => {
   const matches = useMatches();
-  const isCreateDeckPage = matches.find((match) => match.pathname === '/deck');
+  const isDeckEditorPage = matches.find((match) =>
+    match.pathname.includes('/deck')
+  );
 
   return (
     <>
       <Header />
       <main
-        className={`pt-16 px-4 min-h-screen ${isCreateDeckPage ? 'h-screen' : ''}`}
+        className={`pt-16 px-4 min-h-screen ${isDeckEditorPage ? 'h-screen' : ''}`}
       >
         <Outlet />
       </main>

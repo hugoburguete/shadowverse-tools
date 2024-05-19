@@ -77,7 +77,11 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     setDeck({ ...getValidator({ ...deck, format }).validate() });
   };
 
-  const cardDragged = cardPool.find((card) => card.cardId === cardDraggedId);
+  const loadedCards: CardSimplified[] = cardPool
+    .concat(deck.deckList)
+    .concat(deck.evolveList)
+    .concat(deck.leader ? [deck.leader] : []);
+  const cardDragged = loadedCards.find((card) => card.cardId === cardDraggedId);
 
   return (
     <div className="h-full relative">
