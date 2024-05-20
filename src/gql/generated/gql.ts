@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  fragment CardSearchResult on Card {\n    id\n    attack\n    cardId\n    class {\n      id\n      name\n    }\n    cost\n    health\n    image\n    name\n    rarity {\n      acronym\n    }\n    trait\n    type\n  }\n": types.CardSearchResultFragmentDoc,
     "\n  query SearchCards(\n    $searchTerm: String,\n    $cost: [Int!],\n    $expansions: [Int!],\n    $classes: [Int!],\n    $types: [String!],\n    $rarities: [Int!],\n    $after: String,\n  ) {\n    cards(\n      searchTerm: $searchTerm,\n      cost: $cost,\n      expansions: $expansions,\n      classes: $classes,\n      rarities: $rarities,\n      types: $types,\n      after: $after,\n    ) {\n      edges {\n        cursor\n        node {\n          ...CardSearchResult\n        }\n      }\n      totalCount\n      pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n": types.SearchCardsDocument,
+    "\n  query GetCardsById($ids: [Int!]) {\n    cardsById(ids: $ids) {\n      ...CardSearchResult\n    }\n  }\n": types.GetCardsByIdDocument,
     "\nmutation CreateDeck($createDeckInput: CreateDeckInput!) {\n  createDeck(createDeckInput: $createDeckInput) {\n    id\n  }\n}\n": types.CreateDeckDocument,
     "\nmutation UpdateDeck($id: Int!, $input: CreateDeckInput!) {\n  updateDeck(id: $id, input: $input) {\n    status\n  }\n}\n": types.UpdateDeckDocument,
     "\nquery GetUserDecks {\n  decks {\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n      startCursor\n    }\n    edges {\n    \tcursor\n      node {\n        id\n        name  \n      }\n    }\n  }\n}\n": types.GetUserDecksDocument,
@@ -47,6 +48,10 @@ export function gql(source: "\n  fragment CardSearchResult on Card {\n    id\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query SearchCards(\n    $searchTerm: String,\n    $cost: [Int!],\n    $expansions: [Int!],\n    $classes: [Int!],\n    $types: [String!],\n    $rarities: [Int!],\n    $after: String,\n  ) {\n    cards(\n      searchTerm: $searchTerm,\n      cost: $cost,\n      expansions: $expansions,\n      classes: $classes,\n      rarities: $rarities,\n      types: $types,\n      after: $after,\n    ) {\n      edges {\n        cursor\n        node {\n          ...CardSearchResult\n        }\n      }\n      totalCount\n      pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n"): (typeof documents)["\n  query SearchCards(\n    $searchTerm: String,\n    $cost: [Int!],\n    $expansions: [Int!],\n    $classes: [Int!],\n    $types: [String!],\n    $rarities: [Int!],\n    $after: String,\n  ) {\n    cards(\n      searchTerm: $searchTerm,\n      cost: $cost,\n      expansions: $expansions,\n      classes: $classes,\n      rarities: $rarities,\n      types: $types,\n      after: $after,\n    ) {\n      edges {\n        cursor\n        node {\n          ...CardSearchResult\n        }\n      }\n      totalCount\n      pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetCardsById($ids: [Int!]) {\n    cardsById(ids: $ids) {\n      ...CardSearchResult\n    }\n  }\n"): (typeof documents)["\n  query GetCardsById($ids: [Int!]) {\n    cardsById(ids: $ids) {\n      ...CardSearchResult\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

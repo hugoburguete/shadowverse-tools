@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   DndContext,
   DragOverlay,
@@ -6,13 +6,16 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
 import DeckOverview from '../../components/DeckOverview';
+import Loading from '../../components/Loading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
+import { CreateDeckInput } from '../../gql/generated/graphql';
+import { QUERY_GET_CARDS_BY_ID } from '../../gql/queries/card';
 import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
 import {
   addCardToDeck,
@@ -28,6 +31,7 @@ export enum ToggleableView {
 }
 
 export type CreateDeckProps = {};
+export const DRAFT_DECK_LOCALSTORAGE_KEY = 'deck-draft';
 
 const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   const [cardPool, setCardPool] = useState<CardSimplified[]>([]);
@@ -40,7 +44,14 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   const [toggledView, setToggledView] = useState<ToggleableView>(
     ToggleableView.DeckOverview
   );
+  const [deckDraft, setDeckDraft] = useState<CreateDeckInput | null>(null);
 
+  const { data, loading } = useQuery(QUERY_GET_CARDS_BY_ID, {
+    variables: {
+      ids: deckDraft?.deckCards.map((card) => card.cardId),
+    },
+    skip: !deckDraft,
+  });
   const [createDeck] = useMutation(MUTATION_CREATE_DECK);
   const navigate = useNavigate();
   const sensors = useSensors(
@@ -51,6 +62,37 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     })
   );
 
+  // Retrieve draft deck from localstorage
+  useEffect(() => {
+    const strDeck = localStorage.getItem(DRAFT_DECK_LOCALSTORAGE_KEY);
+    if (strDeck) {
+      const deck: CreateDeckInput = JSON.parse(strDeck || '{}');
+      setDeckDraft(deck);
+    }
+  }, []);
+
+  // Load draft deck
+  useEffect(() => {
+    if (data && deckDraft) {
+      const newDeck = {
+        name: deckDraft.name,
+        format: deckDraft.format as DeckFormat,
+        leader: null,
+        deckList: [],
+        evolveList: [],
+      };
+
+      for (const card of data.cardsById) {
+        const quantity =
+          deckDraft?.deckCards.find((c) => c.cardId === card.id)?.quantity || 1;
+
+        setDeck({
+          ...addCardToDeck(card, newDeck, quantity),
+        });
+      }
+    }
+  }, [data, deckDraft]);
+
   const saveDeck = async (newDeck: Deck) => {
     const result = await createDeck({
       variables: {
@@ -59,6 +101,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     });
 
     if (!result.errors) {
+      localStorage.removeItem(DRAFT_DECK_LOCALSTORAGE_KEY);
       navigate(`/deck/${result.data?.createDeck.id}`);
     }
   };
@@ -79,7 +122,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
 
   const locallyStoreDeck = (deck: Deck) => {
     const payload = transformDeckToCreateDeckPayload(deck);
-    localStorage.setItem('temp-deck', JSON.stringify(payload));
+    localStorage.setItem(DRAFT_DECK_LOCALSTORAGE_KEY, JSON.stringify(payload));
     setDeck(deck);
   };
 
@@ -102,13 +145,17 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
             <div
               className={`${toggledView === ToggleableView.DeckOverview ? 'block' : 'hidden'} md:block mb-3 md:w-1/2 lg:w-3/5`}
             >
-              <DeckOverview
-                deck={deck}
-                onDeckSave={saveDeck}
-                onCardClick={({ cardId }) =>
-                  locallyStoreDeck(removeCardFromDeck(cardId, deck))
-                }
-              />
+              {loading && <Loading />}
+
+              {!loading && (
+                <DeckOverview
+                  deck={deck}
+                  onDeckSave={saveDeck}
+                  onCardClick={({ cardId }) =>
+                    locallyStoreDeck(removeCardFromDeck(cardId, deck))
+                  }
+                />
+              )}
             </div>
 
             {/* Card library */}
