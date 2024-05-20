@@ -55,3 +55,11 @@ export const QUERY_SEARCH_CARDS = gql(`
     }
   }
 `);
+
+export const QUERY_GET_CARDS_BY_ID = gql(`
+  query GetCardsById($ids: [Int!]) {
+    cardsById(ids: $ids) {
+      ...CardSearchResult
+    }
+  }
+`);

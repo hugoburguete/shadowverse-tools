@@ -18,10 +18,10 @@ export const EVOLVE_CARD_TYPES = ['Follower / Evolve'];
  * Creates a deck card with default values.
  * @param card
  */
-export const createDeckCard = (card: CardSimplified) => {
+export const createDeckCard = (card: CardSimplified, quantity = 1) => {
   return {
     ...card,
-    quantity: 1,
+    quantity,
     valid: true,
   };
 };
@@ -33,16 +33,20 @@ export const createDeckCard = (card: CardSimplified) => {
  * @param deck The current deck. @param restrictions Restrictions in the format.
  * @returns A modified version of the deck passed.
  */
-export const addCardToDeck = (card: CardSimplified, deck: Deck): Deck => {
+export const addCardToDeck = (
+  card: CardSimplified,
+  deck: Deck,
+  quantity = 1
+): Deck => {
   if (LEADER_CARD_TYPES.includes(card.type)) {
     // Add leader
     deck.leader = createDeckCard(card);
   } else if (EVOLVE_CARD_TYPES.includes(card.type)) {
     // Add evolve card
-    deck.evolveList = addCardToCardList(card, deck.evolveList);
+    deck.evolveList = addCardToCardList(card, deck.evolveList, quantity);
   } else {
     // Add regular card
-    deck.deckList = addCardToCardList(card, deck.deckList);
+    deck.deckList = addCardToCardList(card, deck.deckList, quantity);
   }
   return getValidator(deck).validate();
 };
@@ -53,16 +57,17 @@ export const addCardToDeck = (card: CardSimplified, deck: Deck): Deck => {
  */
 const addCardToCardList = (
   card: CardSimplified,
-  cardList: DeckCard[]
+  cardList: DeckCard[],
+  quantity = 1
 ): DeckCard[] => {
   const index = cardList.findIndex((c) => c.cardId === card.cardId);
 
   if (index >= 0) {
     // Update quantity
-    cardList[index].quantity += 1;
+    cardList[index].quantity += quantity;
   } else {
     // Add new card
-    cardList.push(createDeckCard(card));
+    cardList.push(createDeckCard(card, quantity));
   }
 
   return cardList;
@@ -137,7 +142,10 @@ export const transformDeckToCreateDeckPayload = (
   const deckCards: DeckCardInput[] = deck.deckList
     .map(cardMapper)
     .concat(deck.evolveList.map(cardMapper));
-  deckCards.push(cardMapper(deck.leader as DeckCard));
+
+  if (deck.leader) {
+    deckCards.push(cardMapper(deck.leader));
+  }
 
   return {
     format,
