@@ -4,6 +4,7 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import Layout from './components/blocks/Layout';
+import RequireAuth from './components/blocks/RequireAuth';
 import CreateDeckPage from './pages/CreateDeckPage';
 import DeckListingPage, {
   loader as deckListingPageLoader,
@@ -18,7 +19,7 @@ import GeneralErrorPage from './pages/errors/GeneralErrorPage';
 
 let router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />} errorElement={<GeneralErrorPage />}>
+    <Route element={<Layout />} errorElement={<GeneralErrorPage />}>
       <Route path="/" index element={<HomePage />} />
 
       {/* User routes */}
@@ -26,16 +27,23 @@ let router = createBrowserRouter(
       <Route path="login" element={<LoginPage />} />
 
       {/* Deck routes */}
-      <Route
-        path="decks"
-        element={<DeckListingPage />}
-        loader={deckListingPageLoader}
-      />
       <Route path="deck" element={<CreateDeckPage />} />
 
-      <Route path="/deck/:deckId">
-        <Route path="" loader={viewDeckLoader} element={<ViewDeckPage />} />
-        <Route path="edit" loader={editDeckLoader} element={<EditDeckPage />} />
+      <Route path="/" element={<RequireAuth />}>
+        <Route
+          path="decks"
+          element={<DeckListingPage />}
+          loader={deckListingPageLoader}
+        />
+
+        <Route path="/deck/:deckId">
+          <Route path="" loader={viewDeckLoader} element={<ViewDeckPage />} />
+          <Route
+            path="edit"
+            loader={editDeckLoader}
+            element={<EditDeckPage />}
+          />
+        </Route>
       </Route>
 
       <Route path="*" element={<FourOhFourPage />} />

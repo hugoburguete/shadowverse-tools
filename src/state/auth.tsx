@@ -76,6 +76,13 @@ export const clearAuthCookies = () => {
 };
 
 export const setAuthCookies = (accessToken: string, refreshToken: string) => {
-  Cookies.set('access-token', accessToken);
-  Cookies.set('refresh-token', refreshToken);
+  Cookies.set(ACCESS_TOKEN_COOKIE_KEY, accessToken);
+  Cookies.set(REFRESH_TOKEN_COOKIE_KEY, refreshToken);
+};
+
+export const getAuthCookies = () => {
+  return {
+    accessToken: Cookies.get(ACCESS_TOKEN_COOKIE_KEY),
+    refreshToken: Cookies.get(REFRESH_TOKEN_COOKIE_KEY),
+  };
 };

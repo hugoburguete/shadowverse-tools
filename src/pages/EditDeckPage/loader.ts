@@ -1,8 +1,14 @@
 import { LoaderFunctionArgs } from 'react-router-dom';
 import { client } from '../../apolloclient';
 import { QUERY_GET_DECK } from '../../gql/queries/deck';
+import { getAuthCookies } from '../../state/auth';
 
 const loader = async ({ params }: LoaderFunctionArgs) => {
+  const { accessToken } = getAuthCookies();
+  if (!accessToken) {
+    return null;
+  }
+
   const rawDeckId = params.deckId;
   const deckId = parseInt(rawDeckId || '');
   if (!deckId || isNaN(deckId)) {
