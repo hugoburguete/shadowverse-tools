@@ -11,12 +11,14 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import CardDisplay from '../../components/CardDisplay';
 import CardGallery from '../../components/CardGallery';
+import CardInfoModal from '../../components/CardInfoModal';
 import DeckOverview from '../../components/DeckOverview';
 import Loading from '../../components/Loading';
 import { CardSimplified, Deck, DeckFormat } from '../../entities/card';
 import { CreateDeckInput } from '../../gql/generated/graphql';
 import { QUERY_GET_CARDS_BY_ID } from '../../gql/queries/card';
 import { MUTATION_CREATE_DECK } from '../../gql/queries/deck';
+import useDevice, { DeviceSize } from '../../hooks/useDevice';
 import {
   addCardToDeck,
   removeCardFromDeck,
@@ -46,6 +48,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
   );
   const [deckDraft, setDeckDraft] = useState<CreateDeckInput | null>(null);
 
+  const { deviceSize } = useDevice();
   const { data, loading } = useQuery(QUERY_GET_CARDS_BY_ID, {
     variables: {
       ids: deckDraft?.deckCards.map((card) => card.cardId),
@@ -106,6 +109,8 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     }
   };
 
+  const [cardExaminedId, setCardExaminedId] = useState<number | null>(1);
+
   const { handleDragEnd, handleDragStart, cardDraggedId } = useCardDragAndDrop(
     (cardId) => {
       const card = cardPool.find((card) => card.cardId === cardId);
@@ -120,6 +125,18 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     setDeck({ ...getValidator({ ...deck, format }).validate() });
   };
 
+  const onAddCard = (card: CardSimplified, quantity = 1) => {
+    if (deviceSize === DeviceSize.SM) {
+      setCardExaminedId(card.id);
+    } else {
+      locallyStoreDeck(addCardToDeck(card, deck, quantity));
+    }
+  };
+
+  const onRemoveCard = (cardId: string) => {
+    locallyStoreDeck(removeCardFromDeck(cardId, deck));
+  };
+
   const locallyStoreDeck = (deck: Deck) => {
     const payload = transformDeckToCreateDeckPayload(deck);
     localStorage.setItem(DRAFT_DECK_LOCALSTORAGE_KEY, JSON.stringify(payload));
@@ -131,6 +148,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     .concat(deck.evolveList)
     .concat(deck.leader ? [deck.leader] : []);
   const cardDragged = loadedCards.find((card) => card.cardId === cardDraggedId);
+  const cardExamined = loadedCards.find((card) => card.id === cardExaminedId);
 
   return (
     <div className="h-full relative">
@@ -151,9 +169,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
                 <DeckOverview
                   deck={deck}
                   onDeckSave={saveDeck}
-                  onCardClick={({ cardId }) =>
-                    locallyStoreDeck(removeCardFromDeck(cardId, deck))
-                  }
+                  onCardClick={({ cardId }) => onRemoveCard(cardId)}
                 />
               )}
             </div>
@@ -164,9 +180,8 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
             >
               <CardGallery
                 onCardSearch={setCardPool}
-                onCardClick={(card) =>
-                  locallyStoreDeck(addCardToDeck(card, deck))
-                }
+                onInfoClick={(card) => setCardExaminedId(card.id)}
+                onCardClick={(card) => onAddCard(card)}
                 onFormatChange={onFormatChange}
               />
             </div>
@@ -177,6 +192,19 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
           </DndContext>
         </div>
       </div>
+
+      {/* Card info modal */}
+      <CardInfoModal
+        cardExamined={cardExamined}
+        onAddCard={(qty) =>
+          cardExamined ? onAddCard(cardExamined, qty) : false
+        }
+        onRemoveCard={() =>
+          cardExamined ? onRemoveCard(cardExamined.cardId) : false
+        }
+        deck={deck}
+        onClose={() => setCardExaminedId(null)}
+      />
 
       {/* View toggler for mobile users */}
       <div className="fixed bottom-0 left-0 right-0 flex md:hidden bg-vulcan-900">
