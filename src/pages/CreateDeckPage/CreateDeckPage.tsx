@@ -109,7 +109,7 @@ const CreateDeckPage: React.FC<CreateDeckProps> = () => {
     }
   };
 
-  const [cardExaminedId, setCardExaminedId] = useState<number | null>(1);
+  const [cardExaminedId, setCardExaminedId] = useState<number | null>();
 
   const { handleDragEnd, handleDragStart, cardDraggedId } = useCardDragAndDrop(
     (cardId) => {
