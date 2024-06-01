@@ -129,6 +129,26 @@ const removeCardFromCardList = (
   return cardList;
 };
 
+export const findCardFromDeck = (cardId: number, deck: Deck) => {
+  const findCardInStack = (stack: DeckCard[]) =>
+    stack.find((c) => c.id === cardId);
+
+  let card: DeckCard | undefined;
+  if (deck.leader) {
+    card = findCardInStack([deck.leader]);
+  }
+
+  if (!card) {
+    card = findCardInStack(deck.deckList);
+  }
+
+  if (!card) {
+    card = findCardInStack(deck.evolveList);
+  }
+
+  return card;
+};
+
 export const transformDeckToCreateDeckPayload = (
   deck: Deck
 ): CreateDeckInput => {

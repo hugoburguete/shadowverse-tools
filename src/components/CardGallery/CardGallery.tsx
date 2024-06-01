@@ -20,12 +20,14 @@ export type CardGalleryProps = {
   onCardSearch: (cards: CardSimplified[]) => void;
   onFormatChange: (format: DeckFormat) => void;
   onCardClick?: CardClickEvent;
+  onInfoClick?: CardClickEvent;
 };
 
 const CardGallery = ({
   onCardSearch,
   onFormatChange,
   onCardClick,
+  onInfoClick,
 }: CardGalleryProps) => {
   const [variables, setVariables] = useState<QueryCardsArgs>({
     searchTerm: '',
@@ -112,10 +114,12 @@ const CardGallery = ({
         {error && <ErrorList errors={[error.message]} />}
 
         <CardList
+          showInfoIcon
           className="grid-cols-3 md:grid-cols-4 gap-2"
           cards={cardsForDisplay || []}
           source={CardDragSource.CARD_LIBRARY}
           onCardClick={onCardClick}
+          onInfoClick={onInfoClick}
         />
       </Droppable>
     </div>
